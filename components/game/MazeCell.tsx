@@ -47,7 +47,7 @@ export function MazeCell({
         onCellInteraction(position);
       }}
       onMouseEnter={() => onCellInteraction(position)}
-      onTouchStart={(e) => {
+      onTouchStart={(e: { preventDefault: () => void; }) => {
         e.preventDefault();
         onMouseDown();
         onCellInteraction(position);

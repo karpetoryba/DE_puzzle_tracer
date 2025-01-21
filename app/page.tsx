@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MazeGrid } from '@/components/game/MazeGrid';
 import { levels } from '@/lib/levels';
 import { GameState } from '@/types/game';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Trophy } from 'lucide-react';
+import Timer from '@/components/game/Timer';
 
 export default function Home() {
   const [currentLevel, setCurrentLevel] = useState(0);
@@ -18,6 +19,17 @@ export default function Home() {
     errorMessage: null,
   });
 
+  const [timer, setTimer] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [moveCount, setMoveCount] = useState(0); // Ajoutez cette ligne
+
+  useEffect(() => {
+    if (hasStarted) {
+      setIsActive(true);
+    }
+  }, [hasStarted]);
+
   const handleReset = () => {
     setGameState({
       currentPath: [levels[currentLevel].start],
@@ -26,6 +38,10 @@ export default function Home() {
       isValid: true,
       errorMessage: null,
     });
+    setTimer(0);
+    setHasStarted(false);
+    setIsActive(false);
+    setMoveCount(0); // Réinitialisez le compteur de déplacements
   };
 
   const handleNextLevel = () => {
@@ -38,7 +54,21 @@ export default function Home() {
         isValid: true,
         errorMessage: null,
       });
+      setTimer(0);
+      setHasStarted(false);
+      setIsActive(false);
+      setMoveCount(0); // Réinitialisez le compteur de déplacements
     }
+  };
+
+  const handleFirstInput = () => {
+    if (!hasStarted) {
+      setHasStarted(true);
+    }
+  };
+
+  const handleMove = () => {
+    setMoveCount((prevCount) => prevCount + 1); // Incrémentez le compteur de déplacements
   };
 
   return (
@@ -54,6 +84,8 @@ export default function Home() {
         <div className="flex justify-between items-center">
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold">Level {currentLevel + 1}</h2>
+            <Timer isActive={isActive} onTimerUpdate={setTimer} />
+            <h2 className="text-2xl font-semibold">Move Count: {moveCount}</h2> {/* Ajoutez cette ligne */}
             <p className="text-sm text-muted-foreground">
               {gameState.isComplete ? 'Complete!' : 'In Progress...'}
             </p>
@@ -87,7 +119,7 @@ export default function Home() {
           <Alert className="bg-green-100 border-green-200">
             <Trophy className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-600">
-              Congratulations! You've completed this level!
+              Congratulations! You&apos;ve completed this level!
             </AlertDescription>
           </Alert>
         )}
@@ -96,6 +128,8 @@ export default function Home() {
           <MazeGrid
             level={levels[currentLevel]}
             onGameStateChange={setGameState}
+            onFirstInput={handleFirstInput}
+            onMove={handleMove} // Ajoutez cette ligne
           />
         </div>
 
