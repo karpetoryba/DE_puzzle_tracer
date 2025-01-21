@@ -22,6 +22,11 @@ export function handleMove(
     return;
   }
 
+  // Vérifiez si les trajectoires se chevauchent
+  if (currentPath.some((p) => p.x === mirrorPos.x && p.y === mirrorPos.y)) {
+    return;
+  }
+
   const existingIndex = currentPath.findIndex(
     (p) => p.x === position.x && p.y === position.y
   );
