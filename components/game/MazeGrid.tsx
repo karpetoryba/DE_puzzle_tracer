@@ -3,20 +3,21 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { Level, Position, GameState } from '@/types/game';
 import { MazeCell } from './MazeCell';
-import { isValidMove } from '@/lib/gameLogic';
+import { handleMove } from './moveHandler';
 
 interface MazeGridProps {
   level: Level;
   onGameStateChange: (state: GameState) => void;
-  onFirstInput: () => void; // Ajoutez cette ligne
+  onFirstInput: () => void;
+  onMove: () => void;
 }
 
-export function MazeGrid({ level, onGameStateChange, onFirstInput }: MazeGridProps) {
+export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: MazeGridProps) {
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
-  const hasStarted = useRef(false); // Ajoutez cette ligne
+  const hasStarted = useRef(false);
 
   const getMirrorPosition = useCallback((pos: Position): Position => ({
     x: pos.x,
@@ -81,47 +82,19 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput }: MazeGridPro
         hasStarted.current = true;
       }
 
-      const mirrorPos = getMirrorPosition(position);
-      
-      if (!level.grid[position.y][position.x] || !level.grid[mirrorPos.y][mirrorPos.x]) {
-        return;
-      }
-
-      if (!isValidMove(position, lastValidPosition.current)) {
-        return;
-      }
-
-      const existingIndex = currentPath.findIndex(
-        (p) => p.x === position.x && p.y === position.y
+      handleMove(
+        position,
+        currentPath,
+        lastValidPosition,
+        level,
+        getMirrorPosition,
+        setCurrentPath,
+        onMove,
+        onGameStateChange,
+        setIsDragging
       );
-      
-      let newPath: Position[];
-      if (existingIndex !== -1) {
-        newPath = currentPath.slice(0, existingIndex + 1);
-      } else {
-        newPath = [...currentPath, position];
-      }
-
-      lastValidPosition.current = position;
-      setCurrentPath(newPath);
-
-      const isComplete = 
-        (position.x === level.end.x && position.y === level.end.y) &&
-        (mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y);
-
-      if (isComplete) {
-        setIsDragging(false);
-      }
-
-      onGameStateChange({
-        currentPath: newPath,
-        mirrorPath: newPath.map(getMirrorPosition),
-        isComplete,
-        isValid: true,
-        errorMessage: null,
-      });
     },
-    [currentPath, isDragging, level, getMirrorPosition, onGameStateChange, onFirstInput]
+    [isDragging, onFirstInput, currentPath, level, getMirrorPosition, onMove, onGameStateChange]
   );
 
   const handleMouseDown = useCallback(() => {
