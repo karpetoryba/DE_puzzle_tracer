@@ -8,13 +8,15 @@ import { isValidMove } from '@/lib/gameLogic';
 interface MazeGridProps {
   level: Level;
   onGameStateChange: (state: GameState) => void;
+  onFirstInput: () => void; // Ajoutez cette ligne
 }
 
-export function MazeGrid({ level, onGameStateChange }: MazeGridProps) {
+export function MazeGrid({ level, onGameStateChange, onFirstInput }: MazeGridProps) {
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
+  const hasStarted = useRef(false); // Ajoutez cette ligne
 
   const getMirrorPosition = useCallback((pos: Position): Position => ({
     x: pos.x,
@@ -74,6 +76,11 @@ export function MazeGrid({ level, onGameStateChange }: MazeGridProps) {
     (position: Position) => {
       if (!isDragging) return;
 
+      if (!hasStarted.current) {
+        onFirstInput();
+        hasStarted.current = true;
+      }
+
       const mirrorPos = getMirrorPosition(position);
       
       if (!level.grid[position.y][position.x] || !level.grid[mirrorPos.y][mirrorPos.x]) {
@@ -114,7 +121,7 @@ export function MazeGrid({ level, onGameStateChange }: MazeGridProps) {
         errorMessage: null,
       });
     },
-    [currentPath, isDragging, level, getMirrorPosition, onGameStateChange]
+    [currentPath, isDragging, level, getMirrorPosition, onGameStateChange, onFirstInput]
   );
 
   const handleMouseDown = useCallback(() => {
@@ -185,3 +192,5 @@ export function MazeGrid({ level, onGameStateChange }: MazeGridProps) {
     </div>
   );
 }
+
+export default MazeGrid;

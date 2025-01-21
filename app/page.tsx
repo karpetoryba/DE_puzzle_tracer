@@ -21,10 +21,13 @@ export default function Home() {
 
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
-    setIsActive(true);
-  }, []);
+    if (hasStarted) {
+      setIsActive(true);
+    }
+  }, [hasStarted]);
 
   const handleReset = () => {
     setGameState({
@@ -35,6 +38,8 @@ export default function Home() {
       errorMessage: null,
     });
     setTimer(0);
+    setHasStarted(false);
+    setIsActive(false);
   };
 
   const handleNextLevel = () => {
@@ -48,6 +53,14 @@ export default function Home() {
         errorMessage: null,
       });
       setTimer(0);
+      setHasStarted(false);
+      setIsActive(false);
+    }
+  };
+
+  const handleFirstInput = () => {
+    if (!hasStarted) {
+      setHasStarted(true);
     }
   };
 
@@ -108,6 +121,7 @@ export default function Home() {
           <MazeGrid
             level={levels[currentLevel]}
             onGameStateChange={setGameState}
+            onFirstInput={handleFirstInput} // Ajoutez cette ligne
           />
         </div>
 
