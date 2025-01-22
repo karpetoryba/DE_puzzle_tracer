@@ -43,7 +43,8 @@ export function handleMove(
   setCurrentPath(newPath);
 
   const mustGoThroughVisited = level.mustGoThrough
-    ? newPath.some((p) => p.x === level.mustGoThrough!.x && p.y === level.mustGoThrough!.y)
+    ? newPath.some((p) => p.x === level.mustGoThrough!.x && p.y === level.mustGoThrough!.y) ||
+      newPath.map(getMirrorPosition).some((p) => p.x === level.mustGoThrough!.x && p.y === level.mustGoThrough!.y)
     : true;
 
   const isComplete = 

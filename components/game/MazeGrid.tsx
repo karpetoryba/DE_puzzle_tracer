@@ -50,7 +50,7 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
       if (path.length > 1) {
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.lineWidth = 16;
+        ctx.lineWidth = 4;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
