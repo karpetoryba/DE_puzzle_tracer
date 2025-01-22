@@ -18,6 +18,7 @@ export const levels: Level[] = [
     end: { x: 7, y: 0 },
     mirrorStart: { x: 0, y: 7 },
     mirrorEnd: { x: 7, y: 7 },
+    mustGoThrough: { x: 2, y: 7 }, // Ajoutez cette ligne
   },
   // Add more levels here
 ];
