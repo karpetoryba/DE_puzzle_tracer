@@ -47,6 +47,7 @@ export function handleMove(
   if (existingIndex !== -1 && existingIndex === currentPath.length - 2) {
     // Permet de revenir en arrière sur le tracé
     newPath = currentPath.slice(0, existingIndex + 1);
+    onMove(); // Incrémentez le compteur de mouvements même lors du retour en arrière
   } else if (existingIndex === -1) {
     newPath = [...currentPath, position];
     onMove(); // Incrémentez le compteur de mouvements
