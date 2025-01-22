@@ -128,13 +128,13 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
         const isEnd = level.end.x === x && level.end.y === y;
         const isMirrorStart = level.mirrorStart.x === x && level.mirrorStart.y === y;
         const isMirrorEnd = level.mirrorEnd.x === x && level.mirrorEnd.y === y;
-        const isMustGoThrough = level.mustGoThrough?.x === x && level.mustGoThrough?.y === y; // Ajoutez cette ligne
+        const isMustGoThrough = level.mustGoThrough?.some((pos) => pos.x === x && pos.y === y); // Modifiez cette ligne pour permettre plusieurs cases
 
         return (
           <MazeCell
             key={`${x}-${y}`}
             isWalkable={isWalkable}
-            isMustGoThrough={isMustGoThrough} // Ajoutez cette ligne
+            isMustGoThrough={isMustGoThrough} // Modifiez cette ligne pour permettre plusieurs cases
             isStart={isStart}
             isEnd={isEnd}
             isMirrorStart={isMirrorStart}

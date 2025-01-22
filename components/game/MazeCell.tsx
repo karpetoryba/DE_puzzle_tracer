@@ -11,7 +11,7 @@ interface MazeCellProps {
   isMirrorEnd: boolean;
   isPath: boolean;
   isMirrorPath: boolean;
-  isMustGoThrough: boolean; // Ajoutez cette ligne
+  isMustGoThrough: boolean | undefined; // Modifiez cette ligne pour permettre plusieurs cases
   position: Position;
   onCellInteraction: (position: Position) => void;
   onMouseDown: () => void;
@@ -25,7 +25,7 @@ export function MazeCell({
   isMirrorEnd,
   isPath,
   isMirrorPath,
-  isMustGoThrough, // Ajoutez cette ligne
+  isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
   position,
   onCellInteraction,
   onMouseDown,
@@ -40,7 +40,7 @@ export function MazeCell({
           'bg-green-500': isEnd,
           'bg-purple-500': isMirrorStart,
           'bg-emerald-500': isMirrorEnd,
-          'bg-yellow-500': isMustGoThrough, // Ajoutez cette ligne
+          'bg-yellow-500': isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
           'cursor-pointer hover:bg-blue-200': isWalkable && !isPath && !isStart && !isEnd && !isMirrorStart && !isMirrorEnd,
           'cursor-not-allowed': !isWalkable,
         }
