@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { MazeGrid } from '@/components/game/MazeGrid';
-import { levels } from '@/lib/levels';
-import { GameState } from '@/types/game';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Trophy } from 'lucide-react';
-import Timer from '@/components/game/Timer';
+import React, { useState, useEffect } from "react";
+import { MazeGrid } from "@/components/game/MazeGrid";
+import { levels } from "@/lib/levels";
+import { GameState } from "@/types/game";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Trophy } from "lucide-react";
+import Timer from "@/components/game/Timer";
 
 export default function Home() {
   const [currentLevel, setCurrentLevel] = useState(0);
   const [gameState, setGameState] = useState<GameState>({
     currentPath: [levels[0].start],
-    mirrorPath: [levels[0].mirrorStart],
+    mirrorPath: [levels[0].mirrorStart || { x: 0, y: 0 }],
     isComplete: false,
     isValid: true,
     errorMessage: null,
@@ -33,7 +33,7 @@ export default function Home() {
   const handleReset = () => {
     setGameState({
       currentPath: [levels[currentLevel].start],
-      mirrorPath: [levels[currentLevel].mirrorStart],
+      mirrorPath: [levels[currentLevel].mirrorStart || { x: 0, y: 0 }],
       isComplete: false,
       isValid: true,
       errorMessage: null,
@@ -49,7 +49,7 @@ export default function Home() {
       setCurrentLevel(currentLevel + 1);
       setGameState({
         currentPath: [levels[currentLevel + 1].start],
-        mirrorPath: [levels[currentLevel + 1].mirrorStart],
+        mirrorPath: [levels[currentLevel + 1].mirrorStart || { x: 0, y: 0 }],
         isComplete: false,
         isValid: true,
         errorMessage: null,
@@ -85,17 +85,17 @@ export default function Home() {
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold">Level {currentLevel + 1}</h2>
             <Timer isActive={isActive} onTimerUpdate={setTimer} />
-            <h2 className="text-2xl font-semibold">Move Count: {moveCount}</h2> {/* Ajoutez cette ligne */}
+            <h2 className="text-2xl font-semibold">
+              Move Count: {moveCount}
+            </h2>{" "}
+            {/* Ajoutez cette ligne */}
             <p className="text-sm text-muted-foreground">
-              {gameState.isComplete ? 'Complete!' : 'In Progress...'}
+              {gameState.isComplete ? "Complete!" : "In Progress..."}
             </p>
           </div>
 
           <div className="space-x-2">
-            <Button
-              variant="outline"
-              onClick={handleReset}
-            >
+            <Button variant="outline" onClick={handleReset}>
               Reset Level
             </Button>
             {gameState.isComplete && (
@@ -136,11 +136,18 @@ export default function Home() {
         <div className="text-sm text-muted-foreground">
           <h3 className="font-semibold mb-2">How to Play:</h3>
           <ul className="list-disc list-inside space-y-1">
-            <li>Click and drag to draw a path from the blue start to the green end</li>
-            <li>A mirrored path will automatically appear from the purple start to the emerald end</li>
+            <li>
+              Click and drag to draw a path from the blue start to the green end
+            </li>
+            <li>
+              A mirrored path will automatically appear from the purple start to
+              the emerald end
+            </li>
             <li>Both paths must avoid the red barriers</li>
             <li>You can backtrack by moving over your existing path</li>
-            <li>Complete the level by reaching both end points simultaneously</li>
+            <li>
+              Complete the level by reaching both end points simultaneously
+            </li>
           </ul>
         </div>
       </div>

@@ -12,11 +12,16 @@ export function handleMove(
   onGameStateChange: (state: GameState) => void,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  const mirrorPos = getMirrorPosition(position);
+  const mirrorPos =
+    level.mirrorStart && level.mirrorEnd
+      ? getMirrorPosition(position)
+      : position;
 
   if (
     !level.grid[position.y][position.x] ||
-    !level.grid[mirrorPos.y][mirrorPos.x]
+    (level.mirrorStart &&
+      level.mirrorEnd &&
+      !level.grid[mirrorPos.y][mirrorPos.x])
   ) {
     return;
   }
@@ -25,8 +30,11 @@ export function handleMove(
     return;
   }
 
-  // Vérifiez si les trajectoires se chevauchent
-  if (currentPath.some((p) => p.x === mirrorPos.x && p.y === mirrorPos.y)) {
+  if (
+    level.mirrorStart &&
+    level.mirrorEnd &&
+    currentPath.some((p) => p.x === mirrorPos.x && p.y === mirrorPos.y)
+  ) {
     return;
   }
 
@@ -39,7 +47,7 @@ export function handleMove(
     newPath = currentPath.slice(0, existingIndex + 1);
   } else {
     newPath = [...currentPath, position];
-    onMove(); // Incrémentez le compteur de mouvements
+    onMove(); // Increment move count
   }
 
   lastValidPosition.current = position;
@@ -51,11 +59,13 @@ export function handleMove(
           newPath.some(
             (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
           ) ||
-          newPath
-            .map(getMirrorPosition)
-            .some(
-              (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
-            )
+          (level.mirrorStart &&
+            level.mirrorEnd &&
+            newPath
+              .map(getMirrorPosition)
+              .some(
+                (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+              ))
       )
     : true;
 
@@ -73,7 +83,10 @@ export function handleMove(
 
   onGameStateChange({
     currentPath: newPath,
-    mirrorPath: newPath.map(getMirrorPosition),
+    mirrorPath:
+      level.mirrorStart && level.mirrorEnd
+        ? newPath.map(getMirrorPosition)
+        : [],
     isComplete,
     isValid: true,
     errorMessage: null,
