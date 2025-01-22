@@ -30,6 +30,7 @@ export function handleMove(
     return;
   }
 
+  // Vérifiez si les trajectoires se chevauchent
   if (
     level.mirrorStart &&
     level.mirrorEnd &&
@@ -43,11 +44,14 @@ export function handleMove(
   );
 
   let newPath: Position[];
-  if (existingIndex !== -1) {
+  if (existingIndex !== -1 && existingIndex === currentPath.length - 2) {
+    // Permet de revenir en arrière sur le tracé
     newPath = currentPath.slice(0, existingIndex + 1);
-  } else {
+  } else if (existingIndex === -1) {
     newPath = [...currentPath, position];
-    onMove(); // Increment move count
+    onMove(); // Incrémentez le compteur de mouvements
+  } else {
+    return; // Empêche de revenir sur une case non contiguë
   }
 
   lastValidPosition.current = position;
