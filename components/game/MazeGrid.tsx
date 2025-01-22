@@ -3,7 +3,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Level, Position, GameState } from "@/types/game";
 import { MazeCell } from "./MazeCell";
-import { isValidMove } from "@/lib/gameLogic";
 import { handleMove } from './moveHandler';
 
 interface MazeGridProps {
@@ -18,15 +17,12 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
-
   const hasStarted = useRef(false);
 
   const getMirrorPosition = useCallback((pos: Position): Position => ({
     x: pos.x,
     y: level.size - 1 - pos.y,
   }), [level.size]);
-  //Tracer le chemin.
-
 
   const drawPaths = useCallback(() => {
     const canvas = canvasRef.current;
@@ -54,7 +50,7 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
       if (path.length > 1) {
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 16;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
@@ -132,11 +128,13 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
         const isEnd = level.end.x === x && level.end.y === y;
         const isMirrorStart = level.mirrorStart.x === x && level.mirrorStart.y === y;
         const isMirrorEnd = level.mirrorEnd.x === x && level.mirrorEnd.y === y;
+        const isMustGoThrough = level.mustGoThrough?.x === x && level.mustGoThrough?.y === y; // Ajoutez cette ligne
 
         return (
           <MazeCell
             key={`${x}-${y}`}
             isWalkable={isWalkable}
+            isMustGoThrough={isMustGoThrough} // Ajoutez cette ligne
             isStart={isStart}
             isEnd={isEnd}
             isMirrorStart={isMirrorStart}
@@ -169,4 +167,5 @@ export function MazeGrid({ level, onGameStateChange, onFirstInput, onMove }: Maz
     </div>
   );
 }
+
 export default MazeGrid;

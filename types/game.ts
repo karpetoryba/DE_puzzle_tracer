@@ -10,6 +10,7 @@ export interface Level {
   end: Position;
   mirrorStart: Position;
   mirrorEnd: Position;
+  mustGoThrough?: Position;
   size: number;
 }
 

@@ -42,9 +42,14 @@ export function handleMove(
   lastValidPosition.current = position;
   setCurrentPath(newPath);
 
+  const mustGoThroughVisited = level.mustGoThrough
+    ? newPath.some((p) => p.x === level.mustGoThrough!.x && p.y === level.mustGoThrough!.y)
+    : true;
+
   const isComplete = 
     (position.x === level.end.x && position.y === level.end.y) &&
-    (mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y);
+    (mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y) &&
+    mustGoThroughVisited;
 
   if (isComplete) {
     setIsDragging(false);
