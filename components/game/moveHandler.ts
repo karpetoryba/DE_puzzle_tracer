@@ -1,5 +1,5 @@
-import { Position, GameState, Level } from '@/types/game';
-import { isValidMove } from '@/lib/gameLogic';
+import { Position, GameState, Level } from "@/types/game";
+import { isValidMove } from "@/lib/gameLogic";
 
 export function handleMove(
   position: Position,
@@ -14,7 +14,10 @@ export function handleMove(
 ) {
   const mirrorPos = getMirrorPosition(position);
 
-  if (!level.grid[position.y][position.x] || !level.grid[mirrorPos.y][mirrorPos.x]) {
+  if (
+    !level.grid[position.y][position.x] ||
+    !level.grid[mirrorPos.y][mirrorPos.x]
+  ) {
     return;
   }
 
@@ -43,15 +46,25 @@ export function handleMove(
   setCurrentPath(newPath);
 
   const mustGoThroughVisited = level.mustGoThrough
-    ? level.mustGoThrough.every((mustGoThroughPos) =>
-        newPath.some((p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y) ||
-        newPath.map(getMirrorPosition).some((p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y)
+    ? level.mustGoThrough.every(
+        (mustGoThroughPos) =>
+          newPath.some(
+            (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+          ) ||
+          newPath
+            .map(getMirrorPosition)
+            .some(
+              (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+            )
       )
     : true;
 
-  const isComplete = 
-    (position.x === level.end.x && position.y === level.end.y) &&
-    (mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y) &&
+  const isComplete =
+    position.x === level.end.x &&
+    position.y === level.end.y &&
+    (level.mirrorEnd
+      ? mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y
+      : true) &&
     mustGoThroughVisited;
 
   if (isComplete) {

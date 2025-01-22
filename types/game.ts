@@ -6,11 +6,11 @@ export interface Position {
 export interface Level {
   size: number;
   id: number;
-  grid: boolean[][];  // true represents walkable path, false represents barrier
+  grid: boolean[][]; // true represents walkable path, false represents barrier
   start: Position;
   end: Position;
-  mirrorStart: Position;
-  mirrorEnd: Position;
+  mirrorStart?: Position;
+  mirrorEnd?: Position;
   mustGoThrough?: Position[]; // Modifiez cette ligne pour permettre plusieurs cases
 }
 
