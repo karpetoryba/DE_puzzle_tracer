@@ -104,10 +104,10 @@ export function MazeGrid({
 
   const handleMouseDown = useCallback(
     (position: Position) => {
-      // Проверяем, является ли позиция стартовой
+      // Vérifier si la position est la position de départ
       if (position.x === level.start.x && position.y === level.start.y) {
-        setHasStarted(true); // Запускаем игру
-        onFirstInput(); // Запускаем таймер
+        setHasStarted(true); //Démarrer le jeu
+        onFirstInput(); // Démarrer la minuterie
       }
 
       if (hasStarted) {
