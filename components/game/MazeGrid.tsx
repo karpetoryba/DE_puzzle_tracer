@@ -37,9 +37,24 @@ export function MazeGrid({
       if (!level.mirrorStart) return pos;
       const dx = pos.x - level.start.x;
       const dy = pos.y - level.start.y;
-      return { x: level.mirrorStart.x - dx, y: level.mirrorStart.y - dy };
+      let mirrorX = level.mirrorStart.x;
+      let mirrorY = level.mirrorStart.y;
+
+      if (level.mirrorAxis === 'horizontal' || level.mirrorAxis === 'both') {
+        mirrorX -= dx;
+      } else {
+        mirrorX += dx;
+      }
+
+      if (level.mirrorAxis === 'vertical' || level.mirrorAxis === 'both') {
+        mirrorY -= dy;
+      } else {
+        mirrorY += dy;
+      }
+
+      return { x: mirrorX, y: mirrorY };
     },
-    [level.start, level.mirrorStart]
+    [level.start, level.mirrorStart, level.mirrorAxis]
   );
 
   const handleCellInteraction = useCallback(

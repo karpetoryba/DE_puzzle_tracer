@@ -18,6 +18,7 @@ export const levels: Level[] = [
     end: { x: 7, y: 0 },
     mirrorStart: { x: 5, y: 3 },
     mirrorEnd: { x: 7, y: 7 },
+    mirrorAxis: "vertical",
     mustGoThrough: [
       { x: 2, y: 0 },
       { x: 2, y: 7 },
