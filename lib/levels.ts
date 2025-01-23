@@ -14,9 +14,9 @@ export const levels: Level[] = [
       [true, true, true, true, true, true, true, true],
       [true, true, true, true, true, true, true, true],
     ],
-    start: { x: 0, y: 0 },
+    start: { x: 2, y: 4 },
     end: { x: 7, y: 0 },
-    mirrorStart: { x: 0, y: 5 },
+    mirrorStart: { x: 5, y: 3 },
     mirrorEnd: { x: 7, y: 7 },
     mustGoThrough: [
       { x: 2, y: 0 },
@@ -37,7 +37,7 @@ export const levels: Level[] = [
     ],
     start: { x: 0, y: 0 },
     end: { x: 4, y: 0 },
-    mirrorStart: { x: 0, y: 4 },
+    mirrorStart: { x: 0, y: 3 },
     mirrorEnd: { x: 7, y: 7 },
 
     mustGoThrough: [

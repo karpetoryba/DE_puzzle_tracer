@@ -34,10 +34,12 @@ export function MazeGrid({
 
   const getMirrorPosition = useCallback(
     (pos: Position): Position => {
-      if (!level.mirrorStart || !level.mirrorEnd) return pos;
-      return { x: pos.x, y: level.size - 1 - pos.y };
+      if (!level.mirrorStart) return pos;
+      const dx = pos.x - level.start.x;
+      const dy = pos.y - level.start.y;
+      return { x: level.mirrorStart.x - dx, y: level.mirrorStart.y - dy };
     },
-    [level.size, level.mirrorStart, level.mirrorEnd]
+    [level.start, level.mirrorStart]
   );
 
   const handleCellInteraction = useCallback(
