@@ -22,7 +22,7 @@ export function MazeGrid({
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
-  const hasStarted = useRef(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const getMirrorPosition = useCallback(
     (pos: Position): Position => {
@@ -86,13 +86,7 @@ export function MazeGrid({
 
   const handleCellInteraction = useCallback(
     (position: Position) => {
-      if (!isDragging) return;
-
-      if (!hasStarted.current) {
-        onFirstInput();
-        hasStarted.current = true;
-      }
-
+      if (!hasStarted) return;
       handleMove(
         position,
         currentPath,
@@ -105,20 +99,24 @@ export function MazeGrid({
         setIsDragging
       );
     },
-    [
-      isDragging,
-      onFirstInput,
-      currentPath,
-      level,
-      getMirrorPosition,
-      onMove,
-      onGameStateChange,
-    ]
+    [currentPath, level, getMirrorPosition, onMove, onGameStateChange]
   );
 
-  const handleMouseDown = useCallback(() => {
-    setIsDragging(true);
-  }, []);
+  const handleMouseDown = useCallback(
+    (position: Position) => {
+      // Проверяем, является ли позиция стартовой
+      if (position.x === level.start.x && position.y === level.start.y) {
+        setHasStarted(true); // Запускаем игру
+        onFirstInput(); // Запускаем таймер
+      }
+
+      if (hasStarted) {
+        setIsDragging(true);
+        handleCellInteraction(position);
+      }
+    },
+    [handleCellInteraction, onFirstInput, hasStarted, level.start]
+  );
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -172,7 +170,7 @@ export function MazeGrid({
               isMirrorPath={isMirrorPath}
               position={position}
               onCellInteraction={handleCellInteraction}
-              onMouseDown={handleMouseDown}
+              onMouseDown={() => handleMouseDown(position)}
             />
           );
         })
