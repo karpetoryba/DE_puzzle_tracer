@@ -9,11 +9,12 @@ export function handleMove(
   level: Level,
   getMirrorPosition: (pos: Position) => Position,
   setCurrentPath: React.Dispatch<React.SetStateAction<Position[]>>,
+  setMirrorPath: React.Dispatch<React.SetStateAction<Position[]>>, // Add this line to update the mirror path
   onMove: () => void,
   onGameStateChange: (state: GameState) => void,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
   setCurrentLevel: React.Dispatch<React.SetStateAction<number>>,
-  resetMoveCount: () => void // Ajoutez cette ligne pour réinitialiser le compteur de mouvements
+  resetMoveCount: () => void
 ) {
   const mirrorPos =
     level.mirrorStart && level.mirrorEnd
@@ -59,6 +60,9 @@ export function handleMove(
   lastValidPosition.current = position;
   setCurrentPath(newPath);
 
+  const newMirrorPath = [level.mirrorStart || { x: 0, y: 0 }, ...newPath.map(getMirrorPosition)];
+  setMirrorPath(newMirrorPath);
+
   const mustGoThroughVisited = level.mustGoThrough
     ? level.mustGoThrough.every(
         (mustGoThroughPos) =>
@@ -67,11 +71,9 @@ export function handleMove(
           ) ||
           (level.mirrorStart &&
             level.mirrorEnd &&
-            newPath
-              .map(getMirrorPosition)
-              .some(
-                (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
-              ))
+            newMirrorPath.some(
+              (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+            ))
       )
     : true;
 
@@ -84,13 +86,14 @@ export function handleMove(
 
   if (isComplete) {
     if (!mustGoThroughVisited) {
-      // Réinitialiser le chemin et le dragging si la case fin est atteinte sans que toutes les cases mustGoThrough soient traversées
+      // Reset the path and dragging if the end cell is reached without visiting all mustGoThrough cells
       setCurrentPath([level.start]);
+      setMirrorPath([level.mirrorStart || { x: 0, y: 0 }]);
       lastValidPosition.current = level.start;
-      setIsDragging(false); // Réinitialiser le dragging
+      setIsDragging(false); // Reset dragging
       onGameStateChange({
         currentPath: [level.start],
-        mirrorPath: [getMirrorPosition(level.start)],
+        mirrorPath: [level.mirrorStart || { x: 0, y: 0 }],
         isComplete: false,
         isValid: false,
         errorMessage: "You must go through all required cells before reaching the end.",
@@ -106,10 +109,10 @@ export function handleMove(
           return prevLevel; // Stay on the current level if there are no more levels
         }
       });
-      resetMoveCount(); // Réinitialiser le compteur de mouvements
+      resetMoveCount(); // Reset the move count
       onGameStateChange({
         currentPath: [level.start],
-        mirrorPath: [getMirrorPosition(level.start)],
+        mirrorPath: [level.mirrorStart || { x: 0, y: 0 }],
         isComplete: false,
         isValid: true,
         errorMessage: null,
@@ -120,10 +123,7 @@ export function handleMove(
 
   onGameStateChange({
     currentPath: newPath,
-    mirrorPath:
-      level.mirrorStart && level.mirrorEnd
-        ? newPath.map(getMirrorPosition)
-        : [],
+    mirrorPath: newMirrorPath,
     isComplete,
     isValid: true,
     errorMessage: null,
