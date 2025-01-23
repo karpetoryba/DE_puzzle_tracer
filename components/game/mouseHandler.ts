@@ -1,4 +1,4 @@
-import { Level, Position } from "@/types/game";
+import { Position, Level } from "@/types/game";
 
 export function handleMouseDown(
   position: Position,
@@ -9,15 +9,12 @@ export function handleMouseDown(
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
   handleCellInteraction: (position: Position) => void
 ) {
-  if (position.x === level.start.x && position.y === level.start.y) {
+  if (!hasStarted) {
     setHasStarted(true);
     onFirstInput();
   }
-
-  if (hasStarted) {
-    setIsDragging(true);
-    handleCellInteraction(position);
-  }
+  setIsDragging(true);
+  handleCellInteraction(position);
 }
 
 export function handleMouseUp(setIsDragging: React.Dispatch<React.SetStateAction<boolean>>) {
