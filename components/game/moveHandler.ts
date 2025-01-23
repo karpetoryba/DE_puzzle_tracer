@@ -82,6 +82,23 @@ export function handleMove(
       : true) &&
     mustGoThroughVisited;
 
+  if (position.x === level.end.x && position.y === level.end.y) {
+    if (!mustGoThroughVisited || mustGoThroughVisited) {
+      // Réinitialiser le chemin et le dragging si la case fin est atteinte sans que toutes les cases mustGoThrough soient traversées
+      setCurrentPath([level.start]);
+      lastValidPosition.current = level.start;
+      setIsDragging(false); // Réinitialiser le dragging
+      onGameStateChange({
+        currentPath: [level.start],
+        mirrorPath: [getMirrorPosition(level.start)],
+        isComplete: false,
+        isValid: false,
+        errorMessage: null, // Pas de message d'erreur
+      });
+      return;
+    }
+  }
+
   if (isComplete) {
     setIsDragging(false);
   }
