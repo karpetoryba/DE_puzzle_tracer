@@ -1,5 +1,6 @@
 import { Position, GameState, Level } from "@/types/game";
 import { isValidMove } from "@/lib/gameLogic";
+import { levels } from "@/lib/levels";
 
 export function handleMove(
   position: Position,
@@ -10,7 +11,9 @@ export function handleMove(
   setCurrentPath: React.Dispatch<React.SetStateAction<Position[]>>,
   onMove: () => void,
   onGameStateChange: (state: GameState) => void,
-  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentLevel: React.Dispatch<React.SetStateAction<number>>,
+  resetMoveCount: () => void // Ajoutez cette ligne pour réinitialiser le compteur de mouvements
 ) {
   const mirrorPos =
     level.mirrorStart && level.mirrorEnd
@@ -30,7 +33,6 @@ export function handleMove(
     return;
   }
 
-  // Vérifiez si les trajectoires se chevauchent
   if (
     level.mirrorStart &&
     level.mirrorEnd &&
@@ -45,14 +47,13 @@ export function handleMove(
 
   let newPath: Position[];
   if (existingIndex !== -1 && existingIndex === currentPath.length - 2) {
-    // Permet de revenir en arrière sur le tracé
     newPath = currentPath.slice(0, existingIndex + 1);
-    onMove(); // Incrémentez le compteur de mouvements même lors du retour en arrière
+    onMove();
   } else if (existingIndex === -1) {
     newPath = [...currentPath, position];
-    onMove(); // Incrémentez le compteur de mouvements
+    onMove();
   } else {
-    return; // Empêche de revenir sur une case non contiguë
+    return;
   }
 
   lastValidPosition.current = position;
@@ -79,11 +80,10 @@ export function handleMove(
     position.y === level.end.y &&
     (level.mirrorEnd
       ? mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y
-      : true) &&
-    mustGoThroughVisited;
+      : true);
 
-  if (position.x === level.end.x && position.y === level.end.y) {
-    if (!mustGoThroughVisited || mustGoThroughVisited) {
+  if (isComplete) {
+    if (!mustGoThroughVisited) {
       // Réinitialiser le chemin et le dragging si la case fin est atteinte sans que toutes les cases mustGoThrough soient traversées
       setCurrentPath([level.start]);
       lastValidPosition.current = level.start;
@@ -93,14 +93,29 @@ export function handleMove(
         mirrorPath: [getMirrorPosition(level.start)],
         isComplete: false,
         isValid: false,
-        errorMessage: null, // Pas de message d'erreur
+        errorMessage: "You must go through all required cells before reaching the end.",
+      });
+      return;
+    } else {
+      setIsDragging(false);
+      setCurrentLevel((prevLevel) => {
+        const nextLevel = prevLevel + 1;
+        if (nextLevel < levels.length) {
+          return nextLevel;
+        } else {
+          return prevLevel; // Stay on the current level if there are no more levels
+        }
+      });
+      resetMoveCount(); // Réinitialiser le compteur de mouvements
+      onGameStateChange({
+        currentPath: [level.start],
+        mirrorPath: [getMirrorPosition(level.start)],
+        isComplete: false,
+        isValid: true,
+        errorMessage: null,
       });
       return;
     }
-  }
-
-  if (isComplete) {
-    setIsDragging(false);
   }
 
   onGameStateChange({

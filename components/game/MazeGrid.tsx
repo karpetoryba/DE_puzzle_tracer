@@ -4,12 +4,16 @@ import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Level, Position, GameState } from "@/types/game";
 import { MazeCell } from "./MazeCell";
 import { handleMove } from "./moveHandler";
+import { drawPaths } from "./drawPaths";
+import { handleMouseDown, handleMouseUp } from "./mouseHandler";
 
 interface MazeGridProps {
   level: Level;
   onGameStateChange: (state: GameState) => void;
   onFirstInput: () => void;
   onMove: () => void;
+  setCurrentLevel: React.Dispatch<React.SetStateAction<number>>;
+  resetMoveCount: () => void;
 }
 
 export function MazeGrid({
@@ -17,6 +21,8 @@ export function MazeGrid({
   onGameStateChange,
   onFirstInput,
   onMove,
+  setCurrentLevel,
+  resetMoveCount,
 }: MazeGridProps) {
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
   const [isDragging, setIsDragging] = useState(false);
@@ -32,58 +38,6 @@ export function MazeGrid({
     [level.size, level.mirrorStart, level.mirrorEnd]
   );
 
-  const drawPaths = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const cellSize = 48;
-    const gap = 2;
-    const padding = 8;
-
-    const totalSize = cellSize * level.size + (level.size - 1) * gap;
-    canvas.width = totalSize + padding * 2;
-    canvas.height = totalSize + padding * 2;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const getCellCenter = (pos: Position) => ({
-      x: padding + pos.x * (cellSize + gap) + cellSize / 2,
-      y: padding + pos.y * (cellSize + gap) + cellSize / 2,
-    });
-
-    const drawPath = (path: Position[], color: string) => {
-      if (path.length > 1) {
-        ctx.beginPath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 4;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-
-        const start = getCellCenter(path[0]);
-        ctx.moveTo(start.x, start.y);
-
-        for (let i = 1; i < path.length; i++) {
-          const pos = getCellCenter(path[i]);
-          ctx.lineTo(pos.x, pos.y);
-        }
-        ctx.stroke();
-      }
-    };
-
-    drawPath(currentPath, "rgba(59, 130, 246, 0.8)");
-    const mirrorPath = currentPath.map(getMirrorPosition);
-    if (mirrorPath.length > 0) {
-      drawPath(mirrorPath, "rgba(168, 85, 247, 0.8)");
-    }
-  }, [currentPath, level.size, getMirrorPosition]);
-
-  useEffect(() => {
-    drawPaths();
-  }, [drawPaths]);
-
   const handleCellInteraction = useCallback(
     (position: Position) => {
       if (!hasStarted) return;
@@ -96,40 +50,33 @@ export function MazeGrid({
         setCurrentPath,
         onMove,
         onGameStateChange,
-        setIsDragging
+        setIsDragging,
+        setCurrentLevel,
+        resetMoveCount
       );
     },
-    [currentPath, level, getMirrorPosition, onMove, onGameStateChange]
+    [currentPath, level, onMove, onGameStateChange, hasStarted, setCurrentLevel, getMirrorPosition, resetMoveCount]
   );
-
-  const handleMouseDown = useCallback(
-    (position: Position) => {
-      // Vérifier si la position est la position de départ
-      if (position.x === level.start.x && position.y === level.start.y) {
-        setHasStarted(true); //Démarrer le jeu
-        onFirstInput(); // Démarrer la minuterie
-      }
-
-      if (hasStarted) {
-        setIsDragging(true);
-        handleCellInteraction(position);
-      }
-    },
-    [handleCellInteraction, onFirstInput, hasStarted, level.start]
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
 
   useEffect(() => {
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("touchend", handleMouseUp);
+    drawPaths(canvasRef, currentPath, level.size, getMirrorPosition);
+  }, [currentPath, level.size, getMirrorPosition]);
+
+  useEffect(() => {
+    const handleMouseUpWrapper = () => handleMouseUp(setIsDragging);
+    window.addEventListener("mouseup", handleMouseUpWrapper);
+    window.addEventListener("touchend", handleMouseUpWrapper);
     return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchend", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseUpWrapper);
+      window.removeEventListener("touchend", handleMouseUpWrapper);
     };
-  }, [handleMouseUp]);
+  }, []);
+
+  // Réinitialiser le chemin lorsque le niveau change
+  useEffect(() => {
+    setCurrentPath([level.start]);
+    lastValidPosition.current = level.start;
+  }, [level]);
 
   const gridCells = useMemo(
     () =>
@@ -155,13 +102,13 @@ export function MazeGrid({
 
           const isMustGoThrough = level.mustGoThrough?.some(
             (pos) => pos.x === x && pos.y === y
-          ); // Modifiez cette ligne pour permettre plusieurs cases
+          );
 
           return (
             <MazeCell
               key={`${x}-${y}`}
               isWalkable={isWalkable}
-              isMustGoThrough={isMustGoThrough} // Modifiez cette ligne pour permettre plusieurs cases
+              isMustGoThrough={isMustGoThrough}
               isStart={isStart}
               isEnd={isEnd}
               isMirrorStart={isMirrorStart}
@@ -170,18 +117,12 @@ export function MazeGrid({
               isMirrorPath={isMirrorPath}
               position={position}
               onCellInteraction={handleCellInteraction}
-              onMouseDown={() => handleMouseDown(position)}
+              onMouseDown={() => handleMouseDown(position, level, setHasStarted, onFirstInput, hasStarted, setIsDragging, handleCellInteraction)}
             />
           );
         })
       ),
-    [
-      currentPath,
-      level,
-      getMirrorPosition,
-      handleCellInteraction,
-      handleMouseDown,
-    ]
+    [currentPath, level, handleCellInteraction, hasStarted, onFirstInput, getMirrorPosition]
   );
 
   return (

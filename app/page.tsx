@@ -22,7 +22,7 @@ export default function Home() {
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
-  const [moveCount, setMoveCount] = useState(0); // Ajoutez cette ligne
+  const [moveCount, setMoveCount] = useState(0);
 
   useEffect(() => {
     if (hasStarted) {
@@ -41,15 +41,16 @@ export default function Home() {
     setTimer(0);
     setHasStarted(false);
     setIsActive(false);
-    setMoveCount(0); // Réinitialisez le compteur de déplacements
+    setMoveCount(0);
   };
 
   const handleNextLevel = () => {
     if (currentLevel < levels.length - 1) {
-      setCurrentLevel(currentLevel + 1);
+      const nextLevel = currentLevel + 1;
+      setCurrentLevel(nextLevel);
       setGameState({
-        currentPath: [levels[currentLevel + 1].start],
-        mirrorPath: [levels[currentLevel + 1].mirrorStart || { x: 0, y: 0 }],
+        currentPath: [levels[nextLevel].start],
+        mirrorPath: [levels[nextLevel].mirrorStart || { x: 0, y: 0 }],
         isComplete: false,
         isValid: true,
         errorMessage: null,
@@ -57,7 +58,7 @@ export default function Home() {
       setTimer(0);
       setHasStarted(false);
       setIsActive(false);
-      setMoveCount(0); // Réinitialisez le compteur de déplacements
+      setMoveCount(0);
     }
   };
 
@@ -68,7 +69,11 @@ export default function Home() {
   };
 
   const handleMove = () => {
-    setMoveCount((prevCount) => prevCount + 1); // Incrémentez le compteur de déplacements
+    setMoveCount((prevCount) => prevCount + 1);
+  };
+
+  const resetMoveCount = () => {
+    setMoveCount(0);
   };
 
   return (
@@ -87,8 +92,7 @@ export default function Home() {
             <Timer isActive={isActive} onTimerUpdate={setTimer} />
             <h2 className="text-2xl font-semibold">
               Move Count: {moveCount}
-            </h2>{" "}
-            {/* Ajoutez cette ligne */}
+            </h2>
             <p className="text-sm text-muted-foreground">
               {gameState.isComplete ? "Complete!" : "In Progress..."}
             </p>
@@ -129,7 +133,9 @@ export default function Home() {
             level={levels[currentLevel]}
             onGameStateChange={setGameState}
             onFirstInput={handleFirstInput}
-            onMove={handleMove} // Ajoutez cette ligne
+            onMove={handleMove}
+            setCurrentLevel={setCurrentLevel}
+            resetMoveCount={resetMoveCount}
           />
         </div>
 
