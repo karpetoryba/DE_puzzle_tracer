@@ -46,5 +46,4 @@ export const levels: Level[] = [
       { x: 2, y: 7 },
     ], // Modifiez cette ligne pour définir plusieurs cases
   },
-
 ];
