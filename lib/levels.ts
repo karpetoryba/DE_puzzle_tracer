@@ -1,4 +1,4 @@
-import { Level } from '@/types/game';
+import { Level } from "@/types/game";
 
 export const levels: Level[] = [
   {
@@ -18,6 +18,11 @@ export const levels: Level[] = [
     end: { x: 7, y: 0 },
     mirrorStart: { x: 0, y: 7 },
     mirrorEnd: { x: 7, y: 7 },
+
+    mustGoThrough: [
+      { x: 2, y: 0 },
+      { x: 2, y: 7 },
+    ], // Modifiez cette ligne pour définir plusieurs cases
   },
   // Add more levels here
 ];

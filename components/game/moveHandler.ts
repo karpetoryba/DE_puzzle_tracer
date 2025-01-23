@@ -1,5 +1,5 @@
-import { Position, GameState, Level } from '@/types/game';
-import { isValidMove } from '@/lib/gameLogic';
+import { Position, GameState, Level } from "@/types/game";
+import { isValidMove } from "@/lib/gameLogic";
 
 export function handleMove(
   position: Position,
@@ -12,9 +12,17 @@ export function handleMove(
   onGameStateChange: (state: GameState) => void,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  const mirrorPos = getMirrorPosition(position);
+  const mirrorPos =
+    level.mirrorStart && level.mirrorEnd
+      ? getMirrorPosition(position)
+      : position;
 
-  if (!level.grid[position.y][position.x] || !level.grid[mirrorPos.y][mirrorPos.x]) {
+  if (
+    !level.grid[position.y][position.x] ||
+    (level.mirrorStart &&
+      level.mirrorEnd &&
+      !level.grid[mirrorPos.y][mirrorPos.x])
+  ) {
     return;
   }
 
@@ -23,7 +31,11 @@ export function handleMove(
   }
 
   // Vérifiez si les trajectoires se chevauchent
-  if (currentPath.some((p) => p.x === mirrorPos.x && p.y === mirrorPos.y)) {
+  if (
+    level.mirrorStart &&
+    level.mirrorEnd &&
+    currentPath.some((p) => p.x === mirrorPos.x && p.y === mirrorPos.y)
+  ) {
     return;
   }
 
@@ -32,19 +44,43 @@ export function handleMove(
   );
 
   let newPath: Position[];
-  if (existingIndex !== -1) {
+  if (existingIndex !== -1 && existingIndex === currentPath.length - 2) {
+    // Permet de revenir en arrière sur le tracé
     newPath = currentPath.slice(0, existingIndex + 1);
-  } else {
+    onMove(); // Incrémentez le compteur de mouvements même lors du retour en arrière
+  } else if (existingIndex === -1) {
     newPath = [...currentPath, position];
     onMove(); // Incrémentez le compteur de mouvements
+  } else {
+    return; // Empêche de revenir sur une case non contiguë
   }
 
   lastValidPosition.current = position;
   setCurrentPath(newPath);
 
-  const isComplete = 
-    (position.x === level.end.x && position.y === level.end.y) &&
-    (mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y);
+  const mustGoThroughVisited = level.mustGoThrough
+    ? level.mustGoThrough.every(
+        (mustGoThroughPos) =>
+          newPath.some(
+            (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+          ) ||
+          (level.mirrorStart &&
+            level.mirrorEnd &&
+            newPath
+              .map(getMirrorPosition)
+              .some(
+                (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+              ))
+      )
+    : true;
+
+  const isComplete =
+    position.x === level.end.x &&
+    position.y === level.end.y &&
+    (level.mirrorEnd
+      ? mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y
+      : true) &&
+    mustGoThroughVisited;
 
   if (isComplete) {
     setIsDragging(false);
@@ -52,7 +88,10 @@ export function handleMove(
 
   onGameStateChange({
     currentPath: newPath,
-    mirrorPath: newPath.map(getMirrorPosition),
+    mirrorPath:
+      level.mirrorStart && level.mirrorEnd
+        ? newPath.map(getMirrorPosition)
+        : [],
     isComplete,
     isValid: true,
     errorMessage: null,
