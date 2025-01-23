@@ -26,7 +26,7 @@ export function MazeGrid({
   resetMoveCount,
 }: MazeGridProps) {
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
-  const [mirrorPath, setMirrorPath] = useState<Position[]>([level.mirrorStart || { x: 0, y: 0 }]);
+  const [mirrorPath, setMirrorPath] = useState<Position[]>(level.mirrorStart ? [level.mirrorStart] : []);
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
@@ -103,7 +103,7 @@ export function MazeGrid({
   // Reset the path when the level changes
   useEffect(() => {
     setCurrentPath([level.start]);
-    setMirrorPath([level.mirrorStart || { x: 0, y: 0 }]);
+    setMirrorPath(level.mirrorStart ? [level.mirrorStart] : []);
     lastValidPosition.current = level.start;
   }, [level]);
 

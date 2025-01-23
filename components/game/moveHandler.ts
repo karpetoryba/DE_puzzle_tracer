@@ -60,7 +60,7 @@ export function handleMove(
   lastValidPosition.current = position;
   setCurrentPath(newPath);
 
-  const newMirrorPath = [level.mirrorStart || { x: 0, y: 0 }, ...newPath.map(getMirrorPosition)];
+  const newMirrorPath = level.mirrorStart ? [level.mirrorStart, ...newPath.map(getMirrorPosition)] : [];
   setMirrorPath(newMirrorPath);
 
   const mustGoThroughVisited = level.mustGoThrough
@@ -88,12 +88,12 @@ export function handleMove(
     if (!mustGoThroughVisited) {
       // Reset the path and dragging if the end cell is reached without visiting all mustGoThrough cells
       setCurrentPath([level.start]);
-      setMirrorPath([level.mirrorStart || { x: 0, y: 0 }]);
+      setMirrorPath(level.mirrorStart ? [level.mirrorStart] : []);
       lastValidPosition.current = level.start;
       setIsDragging(false); // Reset dragging
       onGameStateChange({
         currentPath: [level.start],
-        mirrorPath: [level.mirrorStart || { x: 0, y: 0 }],
+        mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],
         isComplete: false,
         isValid: false,
         errorMessage: "You must go through all required cells before reaching the end.",
@@ -112,7 +112,7 @@ export function handleMove(
       resetMoveCount(); // Reset the move count
       onGameStateChange({
         currentPath: [level.start],
-        mirrorPath: [level.mirrorStart || { x: 0, y: 0 }],
+        mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],
         isComplete: false,
         isValid: true,
         errorMessage: null,

@@ -17,7 +17,7 @@ export function drawMainPath(
   if (currentPath.length > 1) {
     ctx.beginPath();
     ctx.strokeStyle = "rgba(59, 130, 246, 0.8)";
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 16;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
