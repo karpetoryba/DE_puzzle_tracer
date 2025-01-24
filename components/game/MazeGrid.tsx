@@ -7,7 +7,7 @@ import { handleMove } from "./moveHandler";
 import { drawMainPath } from "./drawMainPath";
 import { drawMirrorPath } from "./drawMirrorPath";
 import { handleMouseDown, handleMouseUp } from "./mouseHandler";
-import { CELL_SIZE } from "../../lib/config";
+import { CELL_SIZE } from "../../lib/blockSize";
 
 interface MazeGridProps {
   level: Level;

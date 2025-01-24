@@ -2,7 +2,7 @@
 
 import { Position } from "@/types/game";
 import { cn } from "@/lib/utils";
-import { CELL_SIZE } from "../../lib/config";
+import { CELL_SIZE } from "../../lib/blockSize";
 
 interface MazeCellProps {
   isWalkable: boolean;

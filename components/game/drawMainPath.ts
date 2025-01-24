@@ -1,5 +1,5 @@
 import { Position } from "@/types/game";
-import { CELL_SIZE, GAP_SIZE, PADDING_SIZE } from "../../lib/config";
+import { CELL_SIZE, GAP_SIZE, PADDING_SIZE } from "../../lib/blockSize";
 
 export function drawMainPath(
   ctx: CanvasRenderingContext2D,
