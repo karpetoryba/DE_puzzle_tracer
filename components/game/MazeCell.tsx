@@ -2,6 +2,7 @@
 
 import { Position } from "@/types/game";
 import { cn } from "@/lib/utils";
+import { CELL_SIZE } from "../../lib/blockSize";
 
 interface MazeCellProps {
   isWalkable: boolean;
@@ -32,7 +33,7 @@ export function MazeCell({
 }: MazeCellProps) {
   return (
     <div
-      className={cn("w-12 h-12 border border-gray-200 transition-colors", {
+      className={cn("border border-gray-200 transition-colors", {
         "bg-destructive/20": !isWalkable,
         "bg-primary": isStart,
         "bg-green-500": isEnd,
@@ -48,6 +49,7 @@ export function MazeCell({
           !isMirrorEnd,
         "cursor-not-allowed": !isWalkable,
       })}
+      style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
       onMouseDown={() => {
         onMouseDown();
         onCellInteraction(position);
