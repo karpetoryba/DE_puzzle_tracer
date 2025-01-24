@@ -7,6 +7,7 @@ import { handleMove } from "./moveHandler";
 import { drawMainPath } from "./drawMainPath";
 import { drawMirrorPath } from "./drawMirrorPath";
 import { handleMouseDown, handleMouseUp } from "./mouseHandler";
+import { CELL_SIZE } from "../../lib/config";
 
 interface MazeGridProps {
   level: Level;
@@ -157,8 +158,8 @@ export function MazeGrid({
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 pointer-events-none z-10"
-        width={level.size * 50}
-        height={level.size * 50}
+        width={level.size * (CELL_SIZE + 2)} // Adjust the width based on cell size and gap
+        height={level.size * (CELL_SIZE + 2)} // Adjust the height based on cell size and gap
       />
       <div
         className="grid gap-0.5 bg-gray-200 p-2 rounded-lg shadow-lg"

@@ -1,13 +1,14 @@
 import { Position } from "@/types/game";
+import { CELL_SIZE, GAP_SIZE, PADDING_SIZE } from "../../lib/config";
 
 export function drawMainPath(
   ctx: CanvasRenderingContext2D,
   currentPath: Position[],
   levelSize: number
 ) {
-  const cellSize = 48;
-  const gap = 2;
-  const padding = 8;
+  const cellSize = CELL_SIZE;
+  const gap = GAP_SIZE;
+  const padding = PADDING_SIZE;
 
   const getCellCenter = (pos: Position) => ({
     x: padding + pos.x * (cellSize + gap) + cellSize / 2,
