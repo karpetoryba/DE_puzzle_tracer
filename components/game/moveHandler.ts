@@ -1,5 +1,6 @@
 import { Position, GameState, Level } from "@/types/game";
 import { isValidMove } from "@/lib/gameLogic";
+import { levels } from "@/lib/levels";
 
 export function handleMove(
   position: Position,
@@ -8,9 +9,12 @@ export function handleMove(
   level: Level,
   getMirrorPosition: (pos: Position) => Position,
   setCurrentPath: React.Dispatch<React.SetStateAction<Position[]>>,
+  setMirrorPath: React.Dispatch<React.SetStateAction<Position[]>>, // Add this line to update the mirror path
   onMove: () => void,
   onGameStateChange: (state: GameState) => void,
-  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
+  setCurrentLevel: React.Dispatch<React.SetStateAction<number>>,
+  resetMoveCount: () => void
 ) {
   const mirrorPos =
     level.mirrorStart && level.mirrorEnd
@@ -30,7 +34,6 @@ export function handleMove(
     return;
   }
 
-  // Vérifiez si les trajectoires se chevauchent
   if (
     level.mirrorStart &&
     level.mirrorEnd &&
@@ -45,18 +48,20 @@ export function handleMove(
 
   let newPath: Position[];
   if (existingIndex !== -1 && existingIndex === currentPath.length - 2) {
-    // Permet de revenir en arrière sur le tracé
     newPath = currentPath.slice(0, existingIndex + 1);
-    onMove(); // Incrémentez le compteur de mouvements même lors du retour en arrière
+    onMove();
   } else if (existingIndex === -1) {
     newPath = [...currentPath, position];
-    onMove(); // Incrémentez le compteur de mouvements
+    onMove();
   } else {
-    return; // Empêche de revenir sur une case non contiguë
+    return;
   }
 
   lastValidPosition.current = position;
   setCurrentPath(newPath);
+
+  const newMirrorPath = level.mirrorStart ? [level.mirrorStart, ...newPath.map(getMirrorPosition)] : [];
+  setMirrorPath(newMirrorPath);
 
   const mustGoThroughVisited = level.mustGoThrough
     ? level.mustGoThrough.every(
@@ -66,11 +71,9 @@ export function handleMove(
           ) ||
           (level.mirrorStart &&
             level.mirrorEnd &&
-            newPath
-              .map(getMirrorPosition)
-              .some(
-                (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
-              ))
+            newMirrorPath.some(
+              (p) => p.x === mustGoThroughPos.x && p.y === mustGoThroughPos.y
+            ))
       )
     : true;
 
@@ -79,19 +82,48 @@ export function handleMove(
     position.y === level.end.y &&
     (level.mirrorEnd
       ? mirrorPos.x === level.mirrorEnd.x && mirrorPos.y === level.mirrorEnd.y
-      : true) &&
-    mustGoThroughVisited;
+      : true);
 
   if (isComplete) {
-    setIsDragging(false);
+    if (!mustGoThroughVisited) {
+      // Reset the path and dragging if the end cell is reached without visiting all mustGoThrough cells
+      setCurrentPath([level.start]);
+      setMirrorPath(level.mirrorStart ? [level.mirrorStart] : []);
+      lastValidPosition.current = level.start;
+      setIsDragging(false); // Reset dragging
+      onGameStateChange({
+        currentPath: [level.start],
+        mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],
+        isComplete: false,
+        isValid: false,
+        errorMessage: "You must go through all required cells before reaching the end.",
+      });
+      return;
+    } else {
+      setIsDragging(false);
+      setCurrentLevel((prevLevel) => {
+        const nextLevel = prevLevel + 1;
+        if (nextLevel < levels.length) {
+          return nextLevel;
+        } else {
+          return prevLevel; // Stay on the current level if there are no more levels
+        }
+      });
+      resetMoveCount(); // Reset the move count
+      onGameStateChange({
+        currentPath: [level.start],
+        mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],
+        isComplete: false,
+        isValid: true,
+        errorMessage: null,
+      });
+      return;
+    }
   }
 
   onGameStateChange({
     currentPath: newPath,
-    mirrorPath:
-      level.mirrorStart && level.mirrorEnd
-        ? newPath.map(getMirrorPosition)
-        : [],
+    mirrorPath: newMirrorPath,
     isComplete,
     isValid: true,
     errorMessage: null,

@@ -4,14 +4,15 @@ export interface Position {
 }
 
 export interface Level {
-  size: number;
   id: number;
-  grid: boolean[][]; // true represents walkable path, false represents barrier
+  size: number;
   start: Position;
   end: Position;
   mirrorStart?: Position;
   mirrorEnd?: Position;
-  mustGoThrough?: Position[]; // Modifiez cette ligne pour permettre plusieurs cases
+  grid: boolean[][];
+  mustGoThrough?: Position[];
+  mirrorAxis?: 'horizontal' | 'vertical' | 'both'; // Ajoutez cette ligne
 }
 
 export interface GameState {

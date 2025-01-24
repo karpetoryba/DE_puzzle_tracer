@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { Position } from '@/types/game';
-import { cn } from '@/lib/utils';
+import { Position } from "@/types/game";
+import { cn } from "@/lib/utils";
+import { CELL_SIZE } from "../../lib/blockSize";
 
 interface MazeCellProps {
   isWalkable: boolean;
@@ -32,25 +33,35 @@ export function MazeCell({
 }: MazeCellProps) {
   return (
     <div
-      className={cn(
-        'w-12 h-12 border border-gray-200 transition-colors',
-        {
-          'bg-destructive/20': !isWalkable,
-          'bg-primary': isStart,
-          'bg-green-500': isEnd,
-          'bg-purple-500': isMirrorStart,
-          'bg-emerald-500': isMirrorEnd,
-          'bg-yellow-500': isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
-          'cursor-pointer hover:bg-blue-200': isWalkable && !isPath && !isStart && !isEnd && !isMirrorStart && !isMirrorEnd,
-          'cursor-not-allowed': !isWalkable,
-        }
-      )}
+      className={cn("border border-gray-200 transition-colors", {
+        "bg-destructive/20": !isWalkable,
+        "bg-primary": isStart,
+        "bg-green-500": isEnd,
+        "bg-purple-500": isMirrorStart,
+        "bg-emerald-500": isMirrorEnd,
+        "bg-yellow-500": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
+        "cursor-pointer hover:bg-blue-200":
+          isWalkable &&
+          !isPath &&
+          !isStart &&
+          !isEnd &&
+          !isMirrorStart &&
+          !isMirrorEnd,
+        "cursor-not-allowed": !isWalkable,
+      })}
+      style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
       onMouseDown={() => {
         onMouseDown();
         onCellInteraction(position);
       }}
-      onMouseEnter={() => onCellInteraction(position)}
-      onTouchStart={(e: { preventDefault: () => void; }) => {
+      onMouseEnter={() => {
+        // Si le curseur s'ouvre sur la clé de démarrage, activez la procédure
+        if (isStart || isMirrorStart) {
+          onMouseDown();
+        }
+        onCellInteraction(position);
+      }}
+      onTouchStart={(e) => {
         e.preventDefault();
         onMouseDown();
         onCellInteraction(position);
@@ -59,7 +70,7 @@ export function MazeCell({
         e.preventDefault();
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (element?.classList.contains('w-12')) {
+        if (element?.classList.contains("w-12")) {
           onCellInteraction(position);
         }
       }}

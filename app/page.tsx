@@ -1,75 +1,31 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { MazeGrid } from "@/components/game/MazeGrid";
-import { levels } from "@/lib/levels";
-import { GameState } from "@/types/game";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Trophy } from "lucide-react";
 import Timer from "@/components/game/Timer";
+import { useGameState } from "@/hooks/useGameState";
+import { levels } from "@/lib/levels";
 
 export default function Home() {
-  const [currentLevel, setCurrentLevel] = useState(0);
-  const [gameState, setGameState] = useState<GameState>({
-    currentPath: [levels[0].start],
-    mirrorPath: [levels[0].mirrorStart || { x: 0, y: 0 }],
-    isComplete: false,
-    isValid: true,
-    errorMessage: null,
-  });
-
-  const [timer, setTimer] = useState(0);
-  const [isActive, setIsActive] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [moveCount, setMoveCount] = useState(0); // Ajoutez cette ligne
-
-  useEffect(() => {
-    if (hasStarted) {
-      setIsActive(true);
-    }
-  }, [hasStarted]);
-
-  const handleReset = () => {
-    setGameState({
-      currentPath: [levels[currentLevel].start],
-      mirrorPath: [levels[currentLevel].mirrorStart || { x: 0, y: 0 }],
-      isComplete: false,
-      isValid: true,
-      errorMessage: null,
-    });
-    setTimer(0);
-    setHasStarted(false);
-    setIsActive(false);
-    setMoveCount(0); // Réinitialisez le compteur de déplacements
-  };
-
-  const handleNextLevel = () => {
-    if (currentLevel < levels.length - 1) {
-      setCurrentLevel(currentLevel + 1);
-      setGameState({
-        currentPath: [levels[currentLevel + 1].start],
-        mirrorPath: [levels[currentLevel + 1].mirrorStart || { x: 0, y: 0 }],
-        isComplete: false,
-        isValid: true,
-        errorMessage: null,
-      });
-      setTimer(0);
-      setHasStarted(false);
-      setIsActive(false);
-      setMoveCount(0); // Réinitialisez le compteur de déplacements
-    }
-  };
-
-  const handleFirstInput = () => {
-    if (!hasStarted) {
-      setHasStarted(true);
-    }
-  };
-
-  const handleMove = () => {
-    setMoveCount((prevCount) => prevCount + 1); // Incrémentez le compteur de déplacements
-  };
+  const {
+    currentLevel,
+    gameState,
+    timer,
+    isActive,
+    hasStarted,
+    moveCount,
+    setGameState,
+    setTimer,
+    setCurrentLevel,
+    handleReset,
+    handleNextLevel,
+    handleFirstInput,
+    handleMove,
+    resetMoveCount,
+  } = useGameState();
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -87,8 +43,7 @@ export default function Home() {
             <Timer isActive={isActive} onTimerUpdate={setTimer} />
             <h2 className="text-2xl font-semibold">
               Move Count: {moveCount}
-            </h2>{" "}
-            {/* Ajoutez cette ligne */}
+            </h2>
             <p className="text-sm text-muted-foreground">
               {gameState.isComplete ? "Complete!" : "In Progress..."}
             </p>
@@ -129,7 +84,9 @@ export default function Home() {
             level={levels[currentLevel]}
             onGameStateChange={setGameState}
             onFirstInput={handleFirstInput}
-            onMove={handleMove} // Ajoutez cette ligne
+            onMove={handleMove}
+            setCurrentLevel={setCurrentLevel}
+            resetMoveCount={resetMoveCount}
           />
         </div>
 
