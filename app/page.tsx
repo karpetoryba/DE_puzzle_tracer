@@ -8,6 +8,7 @@ import { Trophy } from "lucide-react";
 import Timer from "@/components/game/Timer";
 import { useGameState } from "@/hooks/useGameState";
 import { levels } from "@/lib/levels";
+import RiveAnimation from "@/components/RiveAnimation";
 
 export default function Home() {
   const {
@@ -28,8 +29,14 @@ export default function Home() {
   } = useGameState();
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background">
+        <RiveAnimation
+          src="animations/esd_gameplay.riv"
+          autoplay={true}
+          className="h-[100vh]"
+        />
+        
+      <div className="absolute inset-0 max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold text-primary">Mirror Maze</h1>
           <p className="text-muted-foreground">
