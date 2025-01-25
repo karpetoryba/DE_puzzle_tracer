@@ -12,6 +12,10 @@
   cursor: url("../public/cursors/haxagon-cursor.svg"), auto;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
