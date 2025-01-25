@@ -29,7 +29,7 @@ export default function Home() {
   } = useGameState();
 
   return (
-    <div className="min-h-screen w-full bg-black">
+    <div className="min-h-screen w-full bg-black custom-cursor">
       <Rive
         src="animations/esd_gameplay_hand.riv"
         className="h-[100vh] w-full"

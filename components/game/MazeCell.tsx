@@ -40,14 +40,13 @@ export function MazeCell({
         "bg-purple-500": isMirrorStart,
         "bg-emerald-500": isMirrorEnd,
         "bg-yellow-500": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
-        "cursor-pointer hover:bg-blue-200":
+        "hover:bg-blue-200":
           isWalkable &&
           !isPath &&
           !isStart &&
           !isEnd &&
           !isMirrorStart &&
           !isMirrorEnd,
-        "cursor-not-allowed": !isWalkable,
       })}
       style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
       onMouseDown={() => {
