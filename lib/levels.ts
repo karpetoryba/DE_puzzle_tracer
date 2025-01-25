@@ -34,9 +34,7 @@ export const levels: Level[] = [
     ],
     start: { x: 2, y: 8 },
     end: { x: 6, y: 0 },
-    mustGoThrough: [
-      { x: 6, y: 5 },
-    ], // Modifiez cette ligne pour définir plusieurs cases
+    mustGoThrough: [{ x: 6, y: 5 }], // Modifiez cette ligne pour définir plusieurs cases
   },
   {
     id: 4,
@@ -78,7 +76,7 @@ export const levels: Level[] = [
 
     mirrorStart: { x: 6, y: 5 },
     mirrorEnd: { x: 3, y: 2 },
-    mirrorAxis: "both"
+    mirrorAxis: "both",
   },
   {
     id: 6,
@@ -99,7 +97,7 @@ export const levels: Level[] = [
 
     mirrorStart: { x: 6, y: 5 },
     mirrorEnd: { x: 3, y: 2 },
-    mirrorAxis: "both"
+    mirrorAxis: "both",
   },
   {
     id: 5,
@@ -128,7 +126,7 @@ export const levels: Level[] = [
       { x: 5, y: 1 },
       { x: 6, y: 6 },
       { x: 1, y: 8 },
-    ]
+    ],
   },
 
   // Add more levels here

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 
 interface TimerProps {
     isActive: boolean;
+    textColor?: string;
     onTimerUpdate: (time: number) => void;
 }
 
-const Timer: React.FC<TimerProps> = ({ isActive, onTimerUpdate }) => {
+const Timer: React.FC<TimerProps> = ({ isActive, textColor = "text-white", onTimerUpdate }) => {
     const [timer, setTimer] = useState(0);
     const [startTime, setStartTime] = useState<number | null>(null);
 
@@ -31,7 +32,7 @@ const Timer: React.FC<TimerProps> = ({ isActive, onTimerUpdate }) => {
     const seconds = Math.floor((timer % 60000) / 1000).toString().padStart(2, '0');
     const milliseconds = (timer % 1000).toFixed(0).padStart(3, '0').slice(0, 2);
 
-    return <h2 className="text-2xl font-semibold">Timer : {minutes}:{seconds}:{milliseconds}</h2>;
+    return <h2 className={`text-2xl font-semibold ${textColor}`}>Timer : {minutes}:{seconds}:{milliseconds}</h2>;
 };
 
 export default Timer;
