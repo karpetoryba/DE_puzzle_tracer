@@ -5,12 +5,16 @@ interface RiveAnimationProps {
   src: string; // Chemin vers le fichier .riv
   autoplay?: boolean; // Indique si l'animation doit démarrer automatiquement
   className?: string; // Optionnel : Ajouter des styles
+  animations?: string[]; // Liste des animations à jouer
+  stateMachines?: string[]; // Liste des machines d'état à utiliser
 }
 
 const RiveAnimation: React.FC<RiveAnimationProps> = ({
   src,
   autoplay = true,
   className = "",
+  animations = [],
+  stateMachines = [],
 }) => {
   const layout = useMemo(
     () =>
@@ -25,9 +29,10 @@ const RiveAnimation: React.FC<RiveAnimationProps> = ({
     src,
     autoplay,
     layout,
+    animations,
+    stateMachines,
   });
 
-  console.log(RiveComponent);
   return <RiveComponent className={className} />;
 };
 
