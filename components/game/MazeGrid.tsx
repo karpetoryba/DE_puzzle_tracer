@@ -27,7 +27,9 @@ export function MazeGrid({
   resetMoveCount,
 }: MazeGridProps) {
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
-  const [mirrorPath, setMirrorPath] = useState<Position[]>(level.mirrorStart ? [level.mirrorStart] : []);
+  const [mirrorPath, setMirrorPath] = useState<Position[]>(
+    level.mirrorStart ? [level.mirrorStart] : []
+  );
   const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const lastValidPosition = useRef<Position>(level.start);
@@ -41,13 +43,13 @@ export function MazeGrid({
       let mirrorX = level.mirrorStart.x;
       let mirrorY = level.mirrorStart.y;
 
-      if (level.mirrorAxis === 'horizontal' || level.mirrorAxis === 'both') {
+      if (level.mirrorAxis === "horizontal" || level.mirrorAxis === "both") {
         mirrorX -= dx;
       } else {
         mirrorX += dx;
       }
 
-      if (level.mirrorAxis === 'vertical' || level.mirrorAxis === 'both') {
+      if (level.mirrorAxis === "vertical" || level.mirrorAxis === "both") {
         mirrorY -= dy;
       } else {
         mirrorY += dy;
@@ -76,7 +78,16 @@ export function MazeGrid({
         resetMoveCount
       );
     },
-    [currentPath, level, onMove, onGameStateChange, hasStarted, setCurrentLevel, getMirrorPosition, resetMoveCount]
+    [
+      currentPath,
+      level,
+      onMove,
+      onGameStateChange,
+      hasStarted,
+      setCurrentLevel,
+      getMirrorPosition,
+      resetMoveCount,
+    ]
   );
 
   useEffect(() => {
@@ -145,12 +156,29 @@ export function MazeGrid({
               isMirrorPath={isMirrorPath}
               position={position}
               onCellInteraction={handleCellInteraction}
-              onMouseDown={() => handleMouseDown(position, level, setHasStarted, onFirstInput, hasStarted, setIsDragging, handleCellInteraction)}
+              onMouseDown={() =>
+                handleMouseDown(
+                  position,
+                  level,
+                  setHasStarted,
+                  onFirstInput,
+                  hasStarted,
+                  setIsDragging,
+                  handleCellInteraction
+                )
+              }
             />
           );
         })
       ),
-    [currentPath, mirrorPath, level, handleCellInteraction, hasStarted, onFirstInput, getMirrorPosition]
+    [
+      currentPath,
+      mirrorPath,
+      level,
+      handleCellInteraction,
+      hasStarted,
+      onFirstInput,
+    ]
   );
 
   return (
