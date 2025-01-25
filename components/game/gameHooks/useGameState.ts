@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { levels } from "@/lib/levels";
+import { levels } from "@/components/game/levels/levels";
 import { GameState } from "@/types/game";
 
 export function useGameState() {

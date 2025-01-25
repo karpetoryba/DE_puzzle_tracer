@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { MazeGrid } from "@/components/game/MazeGrid";
+import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Trophy } from "lucide-react";
-import Timer from "@/components/game/Timer";
-import { useGameState } from "@/hooks/useGameState";
-import { levels } from "@/lib/levels";
+import Timer from "@/components/game/game_ui/timer/Timer";
+import { useGameState } from "@/components/game/gameHooks/useGameState";
+import { levels } from "@/components/game/levels/levels";
 import Rive from "@rive-app/react-canvas";
 
 export default function Home() {

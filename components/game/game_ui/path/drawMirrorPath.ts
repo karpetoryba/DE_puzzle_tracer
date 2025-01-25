@@ -1,5 +1,9 @@
 import { Position } from "@/types/game";
-import { CELL_SIZE, GAP_SIZE, PADDING_SIZE } from "../../lib/blockSize";
+import {
+  CELL_SIZE,
+  GAP_SIZE,
+  PADDING_SIZE,
+} from "@/components/game/game_ui/cell/cellSize";
 
 export function drawMirrorPath(
   ctx: CanvasRenderingContext2D,
