@@ -9,6 +9,8 @@ import Timer from "@/components/game/game_ui/timer/Timer";
 import { useGameState } from "@/components/game/gameHooks/useGameState";
 import { levels } from "@/components/game/levels/levels";
 import Rive from "@rive-app/react-canvas";
+import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
+import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 
 export default function Home() {
   const {
@@ -36,15 +38,17 @@ export default function Home() {
         animations={["Idle-Loop_01", "Cursor_ExpandFlower"]}
         stateMachines={["State Machine 1"]}
       />
-      <h2 className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2 text-2xl font-semibold text-white">
-        Level {currentLevel + 1}
-      </h2>
+      <ShowLevel
+        currentLevel={currentLevel}
+        className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2"
+      />
       <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
         <Timer isActive={isActive} onTimerUpdate={setTimer} />
       </div>
-      <h2 className="absolute pointer-events-none top-32 left-[calc(50%+150px)] transform -translate-x-1/2 text-2xl font-semibold text-white">
-        Move Count: {moveCount}
-      </h2>
+      <MoveCounter
+        moveCount={moveCount}
+        className="absolute pointer-events-none top-32 left-[calc(50%+150px)] transform -translate-x-1/2"
+      />
       <p className="absolute pointer-events-none top-40 left-1/2 transform -translate-x-1/2 text-sm text-muted-foreground">
         {gameState.isComplete ? "Complete!" : "In Progress..."}
       </p>
