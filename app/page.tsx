@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div className="min-h-screen w-full bg-black">
       <Rive
-        src="animations/esd_gameplay.riv"
+        src="animations/esd_gameplay_hand.riv"
         className="h-[100vh] w-full"
         animations={["Idle-Loop_01", "Cursor_ExpandFlower"]}
         stateMachines={["State Machine 1"]}
