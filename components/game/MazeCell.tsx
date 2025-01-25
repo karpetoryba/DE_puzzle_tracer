@@ -34,7 +34,7 @@ export function MazeCell({
   return (
     <div
       className={cn("border border-gray-200 transition-colors", {
-        "bg-destructive/20": !isWalkable,
+        "bg-destructive/20 pointer-events-none": !isWalkable,
         "bg-primary": isStart,
         "bg-green-500": isEnd,
         "bg-purple-500": isMirrorStart,

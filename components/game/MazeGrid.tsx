@@ -185,7 +185,7 @@ export function MazeGrid({
     <div className="relative inline-block">
       <canvas
         ref={canvasRef}
-        className="absolute top-0 left-0 pointer-events-none z-10"
+        className="absolute top-0 left-0 pointer-events-none z-10 pointer-events-none"
         width={level.size * (CELL_SIZE + 2)} // Adjust the width based on cell size and gap
         height={level.size * (CELL_SIZE + 2)} // Adjust the height based on cell size and gap
       />
