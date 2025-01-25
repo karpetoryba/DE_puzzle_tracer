@@ -1,6 +1,6 @@
 import { Position, GameState, Level } from "@/types/game";
-import { isValidMove } from "@/lib/gameLogic";
-import { levels } from "@/lib/levels";
+import { isValidMove } from "@/components/game/settings/gameLogic";
+import { levels } from "@/components/game/levels/levels";
 
 export function handleMove(
   position: Position,
@@ -60,7 +60,9 @@ export function handleMove(
   lastValidPosition.current = position;
   setCurrentPath(newPath);
 
-  const newMirrorPath = level.mirrorStart ? [level.mirrorStart, ...newPath.map(getMirrorPosition)] : [];
+  const newMirrorPath = level.mirrorStart
+    ? [level.mirrorStart, ...newPath.map(getMirrorPosition)]
+    : [];
   setMirrorPath(newMirrorPath);
 
   const mustGoThroughVisited = level.mustGoThrough
@@ -96,7 +98,8 @@ export function handleMove(
         mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],
         isComplete: false,
         isValid: false,
-        errorMessage: "You must go through all required cells before reaching the end.",
+        errorMessage:
+          "You must go through all required cells before reaching the end.",
       });
       return;
     } else {

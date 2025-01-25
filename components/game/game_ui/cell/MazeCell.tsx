@@ -1,8 +1,8 @@
 "use client";
 
 import { Position } from "@/types/game";
-import { cn } from "@/lib/utils";
-import { CELL_SIZE } from "../../lib/blockSize";
+import { cn } from "@/components/game/settings/utils";
+import { CELL_SIZE } from "@/components/game/game_ui/cell/cellSize";
 
 interface MazeCellProps {
   isWalkable: boolean;

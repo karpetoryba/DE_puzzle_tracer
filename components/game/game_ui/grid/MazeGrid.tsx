@@ -2,12 +2,15 @@
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Level, Position, GameState } from "@/types/game";
-import { MazeCell } from "./MazeCell";
-import { handleMove } from "./moveHandler";
-import { drawMainPath } from "./drawMainPath";
-import { drawMirrorPath } from "./drawMirrorPath";
-import { handleMouseDown, handleMouseUp } from "./mouseHandler";
-import { CELL_SIZE } from "../../lib/blockSize";
+import { MazeCell } from "@/components/game/game_ui/cell/MazeCell";
+import { handleMove } from "@/components/game/settings/handleMove";
+import { drawMainPath } from "@/components/game/game_ui/path/drawMainPath";
+import { drawMirrorPath } from "@/components/game/game_ui/path/drawMirrorPath";
+import {
+  handleMouseDown,
+  handleMouseUp,
+} from "@/components/game/settings/mouseHandler";
+import { CELL_SIZE } from "@/components/game/game_ui/cell/cellSize";
 
 interface MazeGridProps {
   level: Level;
