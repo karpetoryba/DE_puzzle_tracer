@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import "./globals.css";
+import React, { useEffect } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -30,11 +31,31 @@ export default function Home() {
     resetMoveCount,
   } = useGameState();
 
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const { clientX, clientY } = event;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const moveX = (clientX - centerX) * 0.05;
+      const moveY = (clientY - centerY) * 0.05;
+  
+      document.documentElement.style.setProperty('--move-x', `${moveX}px`);
+      document.documentElement.style.setProperty('--move-y', `${moveY}px`);
+    };
+  
+    window.addEventListener("mousemove", handleMouseMove);
+  
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen w-full bg-black custom-cursor">
+    <div className="min-h-screen w-full custom-cursor bg-transparent interactive">
       <Rive
         src="animations/esd_gameplay_hand.riv"
-        className="h-[100vh] w-full"
+        className="h-[100vh] w-full scale-110"
         animations={["Idle-Loop_01", "Cursor_ExpandFlower"]}
         stateMachines={["State Machine 1"]}
       />
@@ -99,3 +120,6 @@ export default function Home() {
     </div>
   );
 }
+
+
+
