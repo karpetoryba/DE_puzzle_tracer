@@ -9,14 +9,6 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-.custom-cursor {
-  cursor: url("../public/cursors/haxagon-cursor.svg"), auto;
-}
-
-.pointer-events-none {
-  pointer-events: none;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -88,20 +80,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.float {
-  animation: float 3s ease-in-out infinite;
 }

@@ -1,16 +1,13 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
+import { MazeGrid } from "@/components/game/MazeGrid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Trophy } from "lucide-react";
-import Timer from "@/components/game/game_ui/timer/Timer";
-import { useGameState } from "@/components/game/gameHooks/useGameState";
-import { levels } from "@/components/game/levels/levels";
-import Rive from "@rive-app/react-canvas";
-import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
-import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
+import Timer from "@/components/game/Timer";
+import { useGameState } from "@/hooks/useGameState";
+import { levels } from "@/lib/levels";
 
 export default function Home() {
   const {
@@ -30,8 +27,7 @@ export default function Home() {
     resetMoveCount,
   } = useGameState();
 
-
-useEffect(() => {
+  useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
       const centerX = window.innerWidth / 2;
@@ -51,61 +47,49 @@ useEffect(() => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-black custom-cursor">
-      <Rive
-        src="animations/esd_gameplay_hand.riv"
-        className="h-[100vh] w-full"
-        animations={["Idle-Loop_01", "Cursor_ExpandFlower"]}
-        stateMachines={["State Machine 1"]}
-      />
-      <ShowLevel
-        currentLevel={currentLevel}
-        className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2"
-      />
-      <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
-        <Timer isActive={isActive} onTimerUpdate={setTimer} />
-      </div>
-      <MoveCounter
-        moveCount={moveCount}
-        className="absolute pointer-events-none top-32 left-[calc(50%+150px)] transform -translate-x-1/2"
-      />
-      <p className="absolute pointer-events-none top-40 left-1/2 transform -translate-x-1/2 text-sm text-muted-foreground">
-        {gameState.isComplete ? "Complete!" : "In Progress..."}
-      </p>
-      <Button
-        variant="outline"
-        onClick={handleReset}
-        className="absolute top-48 left-1/2 transform -translate-x-1/2"
-      >
-        Reset Level
-      </Button>
-      {gameState.isComplete && (
-        <Button
-          onClick={handleNextLevel}
-          disabled={currentLevel >= levels.length - 1}
-          className="absolute top-56 left-1/2 transform -translate-x-1/2"
-        >
-          Next Level
-        </Button>
-      )}
-      {gameState.errorMessage && (
-        <Alert
-          variant="destructive"
-          className="absolute top-64 left-1/2 transform -translate-x-1/2"
-        >
-          <AlertDescription>{gameState.errorMessage}</AlertDescription>
-        </Alert>
-      )}
-      {gameState.isComplete && (
-        <Alert className="absolute top-72 left-1/2 transform -translate-x-1/2 bg-green-100 border-green-200">
-          <Trophy className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-600">
-            Congratulations! You&apos;ve completed this level!
-          </AlertDescription>
-        </Alert>
-      )}
-      <div className="absolute top-60 left-1/2 transform -translate-x-1/2">
-        <div className="float">
+    <div className="min-h-screen bg-background p-8 bg-game interactive">
+      <div className="max-w-4xl mx-auto grid grid-cols-1 gap-8 interactive">
+       
+        <div className="flex justify-between items-center">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold">Interface {currentLevel + 1}</h2>
+            <Timer isActive={isActive} onTimerUpdate={setTimer} />
+            <h2 className="text-2xl font-semibold">
+              Déplacements : {moveCount}
+            </h2>
+          </div>
+
+          <div className="space-x-2">
+            <Button variant="outline" onClick={handleReset}>
+              Reset Level
+            </Button>
+            {gameState.isComplete && (
+              <Button
+                onClick={handleNextLevel}
+                disabled={currentLevel >= levels.length - 1}
+              >
+                Next Level
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {gameState.errorMessage && (
+          <Alert variant="destructive">
+            <AlertDescription>{gameState.errorMessage}</AlertDescription>
+          </Alert>
+        )}
+
+        {gameState.isComplete && (
+          <Alert className="bg-green-100 border-green-200">
+            <Trophy className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-600">
+              Bravo ! Tu as réussi l'interface {currentLevel + 1} en {timer} secondes
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
           <MazeGrid
             level={levels[currentLevel]}
             onGameStateChange={setGameState}
