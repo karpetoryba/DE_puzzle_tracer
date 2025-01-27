@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { MazeGrid } from "@/components/game/MazeGrid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -27,26 +27,36 @@ export default function Home() {
     resetMoveCount,
   } = useGameState();
 
-  return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-primary">Mirror Maze</h1>
-          <p className="text-muted-foreground">
-            Draw a path that works for both the original and mirrored maze
-          </p>
-        </div>
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const { clientX, clientY } = event;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const moveX = (clientX - centerX) * 0.05;
+      const moveY = (clientY - centerY) * 0.05;
+  
+      document.documentElement.style.setProperty('--move-x', `${moveX}px`);
+      document.documentElement.style.setProperty('--move-y', `${moveY}px`);
+    };
+  
+    window.addEventListener("mousemove", handleMouseMove);
+  
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
+  return (
+    <div className="min-h-screen bg-background p-8 bg-game interactive">
+      <div className="max-w-4xl mx-auto grid grid-cols-1 gap-8 interactive">
+       
         <div className="flex justify-between items-center">
           <div className="space-y-1">
-            <h2 className="text-2xl font-semibold">Level {currentLevel + 1}</h2>
+            <h2 className="text-2xl font-semibold">Interface {currentLevel + 1}</h2>
             <Timer isActive={isActive} onTimerUpdate={setTimer} />
             <h2 className="text-2xl font-semibold">
-              Move Count: {moveCount}
+              Déplacements : {moveCount}
             </h2>
-            <p className="text-sm text-muted-foreground">
-              {gameState.isComplete ? "Complete!" : "In Progress..."}
-            </p>
           </div>
 
           <div className="space-x-2">
@@ -74,7 +84,7 @@ export default function Home() {
           <Alert className="bg-green-100 border-green-200">
             <Trophy className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-600">
-              Congratulations! You&apos;ve completed this level!
+              Bravo ! Tu as réussi l'interface {currentLevel + 1} en {timer} secondes
             </AlertDescription>
           </Alert>
         )}
@@ -90,23 +100,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="text-sm text-muted-foreground">
-          <h3 className="font-semibold mb-2">How to Play:</h3>
-          <ul className="list-disc list-inside space-y-1">
-            <li>
-              Click and drag to draw a path from the blue start to the green end
-            </li>
-            <li>
-              A mirrored path will automatically appear from the purple start to
-              the emerald end
-            </li>
-            <li>Both paths must avoid the red barriers</li>
-            <li>You can backtrack by moving over your existing path</li>
-            <li>
-              Complete the level by reaching both end points simultaneously
-            </li>
-          </ul>
-        </div>
+        
       </div>
     </div>
   );

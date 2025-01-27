@@ -33,7 +33,7 @@ export function MazeCell({
 }: MazeCellProps) {
   return (
     <div
-      className={cn("border border-gray-200 transition-colors", {
+      className={cn("border border-gray-200 transition-colors bg-blur", {
         "bg-destructive/20": !isWalkable,
         "bg-primary": isStart,
         "bg-green-500": isEnd,
