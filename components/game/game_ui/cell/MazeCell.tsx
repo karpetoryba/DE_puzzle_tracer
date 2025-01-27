@@ -38,7 +38,7 @@ export function MazeCell({
         "bg-primary": isStart,
         "bg-green-500": isEnd,
         "bg-purple-500": isMirrorStart,
-        "bg-emerald-500": isMirrorEnd,
+        "bg-red-500": isMirrorEnd,
         "bg-yellow-500": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
         "hover:bg-blue-200":
           isWalkable &&
