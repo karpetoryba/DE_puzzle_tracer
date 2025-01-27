@@ -33,26 +33,21 @@ export function MazeCell({
 }: MazeCellProps) {
   return (
     <div
-      className={cn("border border-gray-200 transition-colors", {
+      className={cn("border border-gray-200 transition-colors rounded-md", {
         "bg-destructive/20 pointer-events-none": !isWalkable,
-        "bg-primary": isStart,
+        "buttonStart bg-transparent": isStart,
         "bg-green-500": isEnd,
         "bg-purple-500": isMirrorStart,
         "bg-emerald-500": isMirrorEnd,
-        "bg-yellow-500": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
-        "hover:bg-blue-200":
-          isWalkable &&
-          !isPath &&
-          !isStart &&
-          !isEnd &&
-          !isMirrorStart &&
-          !isMirrorEnd,
+        "buttonCheckpoint": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
       })}
+
       style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
       onMouseDown={() => {
         onMouseDown();
         onCellInteraction(position);
       }}
+      
       onMouseEnter={() => {
         // Si le curseur s'ouvre sur la clé de démarrage, activez la procédure
         if (isStart || isMirrorStart) {
