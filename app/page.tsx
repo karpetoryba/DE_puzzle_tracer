@@ -65,7 +65,7 @@ export default function Home() {
 
       {formDisplayed && (
         <FormPlayer
-          classname="absolute left-[45%] bottom-[50%] float"
+          classname="absolute left-[40%] bottom-[45%] float form"
           onSubmit={() => setFormDisplayed(false)}
         />
       )}
@@ -75,16 +75,16 @@ export default function Home() {
           <div className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2 flex space-x-8">
       <ShowLevel
         currentLevel={currentLevel}
-        className="pointer-events-none"
+        className="pointer-events-none float1"
       />
       <Timer
         isActive={isActive}
         onTimerUpdate={setTimer}
-        textColor="text-white"
+        textColor="text-white float2"
       />
       <MoveCounter
         moveCount={moveCount}
-        className="pointer-events-none"
+        className="pointer-events-none float3"
       />
     </div>
           <div className="absolute top-[20%] left-1/2 transform scale-[100%] -translate-x-1/2">
