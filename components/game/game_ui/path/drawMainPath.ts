@@ -21,10 +21,16 @@ export function drawMainPath(
 
   if (currentPath.length > 1) {
     ctx.beginPath();
-    ctx.strokeStyle = "rgba(59, 130, 246, 0.8)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
     ctx.lineWidth = 16;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
+
+    // Add glow effect
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
 
     const start = getCellCenter(currentPath[0]);
     ctx.moveTo(start.x, start.y);
@@ -34,5 +40,9 @@ export function drawMainPath(
       ctx.lineTo(pos.x, pos.y);
     }
     ctx.stroke();
+
+    // Reset shadow properties to avoid affecting other drawings
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = "transparent";
   }
 }
