@@ -1,5 +1,4 @@
 "use client";
-
 import { Position } from "@/types/game";
 import { cn } from "@/components/game/settings/utils";
 import { CELL_SIZE } from "@/components/game/game_ui/cell/cellSize";
@@ -12,7 +11,7 @@ interface MazeCellProps {
   isMirrorEnd: boolean;
   isPath: boolean;
   isMirrorPath: boolean;
-  isMustGoThrough: boolean | undefined; // Modifiez cette ligne pour permettre plusieurs cases
+  isMustGoThrough: boolean | undefined;
   position: Position;
   onCellInteraction: (position: Position) => void;
   onMouseDown: () => void;
@@ -26,7 +25,7 @@ export function MazeCell({
   isMirrorEnd,
   isPath,
   isMirrorPath,
-  isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
+  isMustGoThrough,
   position,
   onCellInteraction,
   onMouseDown,
@@ -39,17 +38,15 @@ export function MazeCell({
         "bg-green-500": isEnd,
         "bg-purple-500": isMirrorStart,
         "bg-emerald-500": isMirrorEnd,
-        "buttonCheckpoint": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
+        "buttonCheckpoint": isMustGoThrough,
+        "buttonCheckpointOn": isMustGoThrough && isPath,
       })}
-
-      style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
+      style={{ width: CELL_SIZE, height: CELL_SIZE }}
       onMouseDown={() => {
         onMouseDown();
         onCellInteraction(position);
       }}
-      
       onMouseEnter={() => {
-        // Si le curseur s'ouvre sur la clé de démarrage, activez la procédure
         if (isStart || isMirrorStart) {
           onMouseDown();
         }

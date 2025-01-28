@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Level, Position, GameState } from "@/types/game";
 import { MazeCell } from "@/components/game/game_ui/cell/MazeCell";
@@ -73,7 +72,7 @@ export function MazeGrid({
         level,
         getMirrorPosition,
         setCurrentPath,
-        setMirrorPath, // Pass this line to update the mirror path
+        setMirrorPath,
         onMove,
         onGameStateChange,
         setIsDragging,
@@ -150,13 +149,13 @@ export function MazeGrid({
             <MazeCell
               key={`${x}-${y}`}
               isWalkable={isWalkable}
-              isMustGoThrough={isMustGoThrough}
               isStart={isStart}
               isEnd={isEnd}
               isMirrorStart={isMirrorStart}
               isMirrorEnd={isMirrorEnd}
               isPath={isPath}
               isMirrorPath={isMirrorPath}
+              isMustGoThrough={isMustGoThrough}
               position={position}
               onCellInteraction={handleCellInteraction}
               onMouseDown={() =>
@@ -189,11 +188,11 @@ export function MazeGrid({
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 z-10 pointer-events-none"
-        width={level.size * (CELL_SIZE + 2)} // Adjust the width based on cell size and gap
-        height={level.size * (CELL_SIZE + 2)} // Adjust the height based on cell size and gap
+        width={level.size * (CELL_SIZE + 2)}
+        height={level.size * (CELL_SIZE + 2)}
       />
       <div
-        className="grid gap-0.5 bg-gray-200 p-2 rounded-lg shadow-lg]"
+        className="grid gap-0.5 bg-gray-200 p-2 rounded-lg shadow-lg"
         style={{
           gridTemplateColumns: `repeat(${level.size}, minmax(0, 1fr))`,
         }}

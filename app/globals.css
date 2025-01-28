@@ -1503,6 +1503,7 @@ h1, h2, h3, h4, h5, h6 {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
   }
   .bg-purple-500 {
     --tw-bg-opacity: 1;
@@ -1515,7 +1516,20 @@ h1, h2, h3, h4, h5, h6 {
     background-color: transparent;
   }
 
-
+  @keyframes floatbud {
+    0% {
+      transform: translateY(0);
+      transform: scale(1)
+    }
+    50% {
+      transform: translateY(-5px);
+      transform: scale(1.1)
+    }
+    100% {
+      transform: translateY(0);
+      transform: scale(1)
+    }
+  }
   
   .buttonCheckpoint {
     background-image: url('../components/game/assets/flowerbug.png');
@@ -1524,21 +1538,16 @@ h1, h2, h3, h4, h5, h6 {
     background-repeat: no-repeat;
     scale: 1.5;
     z-index: 2;
-    transition: 1s ease !important;
-    animation :  5s ease-in-out infinite;
+    transition: 1s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8)); /* Add glow effect to the PNG */
   }
 
-  .buttonCheckpoint:hover {
-    transition: 1s ease !important; 
+
+
+  .buttonCheckpointOn {
     transform: scale(1.1) rotate(360deg);
     background-image: url('../components/game/assets/flower.png'); /* Combine scale and rotate transformations */
-
   }
-
-  .buttonCheckpoint.persistent-hover {
-    transform: scale(1.1) rotate(360deg);
-    background-image: url('../components/game/assets/flower.png');
-}
 
   .fill-current {
     fill: currentColor;
