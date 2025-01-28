@@ -30,6 +30,7 @@ export default function Home() {
 
   const [formDisplayed, setFormDisplayed] = useState(true);
   const [gameFinished, setGameFinished] = useState(false);
+  const [timeScore, setTimeScore] = useState(0);
   const [player, setPlayer] = useState<Player>({
     id: 0,
     score: 0,
@@ -106,6 +107,7 @@ export default function Home() {
               onTimerUpdate={setTimer}
               textColor="text-white"
               onTimerEnd={sendPlayer} // Ajouté ici
+              setTimeScore={setTimeScore}
             />
           </div>
 

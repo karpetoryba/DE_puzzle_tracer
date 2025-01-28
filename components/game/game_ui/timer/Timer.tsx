@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SetStateAction } from "react";
 
 interface TimerProps {
   isActive: boolean;
   textColor?: string;
   onTimerUpdate: (time: number) => void;
   onTimerEnd: () => void;
+  setTimeScore: React.Dispatch<SetStateAction<number>>;
 }
 
 const Timer: React.FC<TimerProps> = ({
@@ -12,6 +13,7 @@ const Timer: React.FC<TimerProps> = ({
   textColor = "text-white",
   onTimerUpdate,
   onTimerEnd,
+  setTimeScore,
 }) => {
   const [timer, setTimer] = useState(300000); // 5 minutes in milliseconds
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -41,13 +43,14 @@ const Timer: React.FC<TimerProps> = ({
         } else {
           setTimer(timeLeft);
           onTimerUpdate(timeLeft);
+          setTimeScore(timeLeft);
         }
       }, 100);
     } else if (!isActive && timer !== 300000) {
       clearInterval(interval!);
     }
     return () => clearInterval(interval!);
-  }, [isActive, timer, onTimerUpdate, startTime, onTimerEnd]);
+  }, [isActive, timer, onTimerUpdate, startTime, onTimerEnd, setTimeScore]);
 
   const minutes = Math.floor(timer / 60000)
     .toString()
