@@ -35,7 +35,7 @@ export default function Home() {
     score: 0,
   });
 
-  const sendScore = () => {
+  const sendPlayer = () => {
     console.log("coucou");
   };
 
@@ -105,7 +105,7 @@ export default function Home() {
               isActive={isActive}
               onTimerUpdate={setTimer}
               textColor="text-white"
-              onTimerEnd={sendScore} // Ajouté ici
+              onTimerEnd={sendPlayer} // Ajouté ici
             />
           </div>
 
@@ -122,7 +122,6 @@ export default function Home() {
                 onFirstInput={handleFirstInput}
                 onMove={handleMove}
                 setCurrentLevel={setCurrentLevel}
-                resetMoveCount={resetMoveCount}
               />
             </div>
           </div>

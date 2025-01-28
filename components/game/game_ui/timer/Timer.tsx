@@ -25,7 +25,7 @@ const Timer: React.FC<TimerProps> = ({
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - (startTime || currentTime);
-        const timeLeft = 5000 - elapsedTime;
+        const timeLeft = 300000 - elapsedTime;
         if (timeLeft <= 0) {
           clearInterval(interval!);
           setTimer(0);
