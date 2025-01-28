@@ -28,6 +28,10 @@ const Timer: React.FC<TimerProps> = ({
           clearInterval(interval!);
           setTimer(0);
           onTimerUpdate(0);
+
+          // Добавляем редирект на нужную страницу
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/loose";
         } else {
           setTimer(timeLeft);
           onTimerUpdate(timeLeft);
