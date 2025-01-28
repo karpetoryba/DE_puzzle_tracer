@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 interface TimerProps {
   isActive: boolean;
@@ -28,10 +30,6 @@ const Timer: React.FC<TimerProps> = ({
           clearInterval(interval!);
           setTimer(0);
           onTimerUpdate(0);
-
-          // Добавляем редирект на нужную страницу
-          window.location.href =
-            "https://irresistible-products-927490.framer.app/loose";
         } else {
           setTimer(timeLeft);
           onTimerUpdate(timeLeft);
@@ -52,7 +50,8 @@ const Timer: React.FC<TimerProps> = ({
   const milliseconds = (timer % 1000).toFixed(0).padStart(3, "0").slice(0, 2);
 
   return (
-    <div className={`timer ${textColor} text-2xl font-bold`}>
+    <div className={`timer glassmorphism ${textColor} text-2xl font-bold flex items-center justify-center`}>
+      <FontAwesomeIcon icon={faClock} className="mr-2 scale-[75%]" />
       {minutes}:{seconds}:{milliseconds}
     </div>
   );

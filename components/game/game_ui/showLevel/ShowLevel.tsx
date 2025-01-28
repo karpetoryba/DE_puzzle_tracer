@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLayerGroup } from "@fortawesome/free-solid-svg-icons";
 
 interface ShowLevelProps {
   currentLevel: number;
@@ -7,9 +9,12 @@ interface ShowLevelProps {
 
 const ShowLevel: React.FC<ShowLevelProps> = ({ currentLevel, className }) => {
   return (
-    <h2 className={`text-2xl font-semibold text-white ${className}`}>
-      Level {currentLevel + 1}
-    </h2>
+    <div className={`show-level glassmorphism ${className}`}>
+      <FontAwesomeIcon icon={faLayerGroup} className="mr-2 text-white" />
+      <h2 className="text-2xl font-semibold text-white">
+        Level: {currentLevel}
+      </h2>
+    </div>
   );
 };
 

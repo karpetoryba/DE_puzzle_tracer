@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRunning } from "@fortawesome/free-solid-svg-icons";
 
 interface MoveCounterProps {
   moveCount: number;
@@ -7,9 +9,12 @@ interface MoveCounterProps {
 
 const MoveCounter: React.FC<MoveCounterProps> = ({ moveCount, className }) => {
   return (
-    <h2 className={`text-2xl font-semibold text-white ${className}`}>
-      Move Count: {moveCount}
-    </h2>
+    <div className={`move-counter glassmorphism ${className}`}>
+      <FontAwesomeIcon icon={faRunning} className="mr-2 text-white" />
+      <h2 className="text-2xl font-semibold text-white">
+        Actions: {moveCount}
+      </h2>
+    </div>
   );
 };
 

@@ -72,22 +72,22 @@ export default function Home() {
 
       {!formDisplayed && (
         <>
-          <ShowLevel
-            currentLevel={currentLevel}
-            className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2"
-          />
-          <div className="absolute pointer-events-none top-20 left-[calc(50%-150px)] transform -translate-x-1/2">
-            <Timer
-              isActive={isActive}
-              onTimerUpdate={setTimer}
-              textColor="text-white"
-            />
-          </div>
-          <MoveCounter
-            moveCount={moveCount}
-            className="absolute pointer-events-none top-20 left-[calc(50%+150px)] transform -translate-x-1/2"
-          />
-          <div className="absolute top-[20%] left-1/2 transform rounded-3xl -translate-x-1/2">
+          <div className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2 flex space-x-8">
+      <ShowLevel
+        currentLevel={currentLevel}
+        className="pointer-events-none"
+      />
+      <Timer
+        isActive={isActive}
+        onTimerUpdate={setTimer}
+        textColor="text-white"
+      />
+      <MoveCounter
+        moveCount={moveCount}
+        className="pointer-events-none"
+      />
+    </div>
+          <div className="absolute top-[20%] left-1/2 transform scale-[100%] -translate-x-1/2">
             <div className="float">
               <MazeGrid
                 level={levels[currentLevel]}

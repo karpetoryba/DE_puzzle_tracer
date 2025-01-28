@@ -33,11 +33,11 @@ export function MazeCell({
 }: MazeCellProps) {
   return (
     <div
-      className={cn("border border-gray-200 transition-colors", {
-        "bg-destructive/20 pointer-events-none": !isWalkable,
+      className={cn(" transition-colors", {
+        "bg-destructive/20 pointer-events-none ": !isWalkable,
         "buttonStart bg-transparent": isStart,
-        "bg-green-500": isEnd,
-        "bg-purple-500": isMirrorStart,
+        "buttonEnd": isEnd,
+        "buttonMirrorStart": isMirrorStart,
         "bg-emerald-500": isMirrorEnd,
         "buttonCheckpoint": isMustGoThrough,
         "buttonCheckpointOn": isMustGoThrough && (isPath || isMirrorPath),
