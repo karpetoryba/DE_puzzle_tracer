@@ -73,51 +73,16 @@ export default function Home() {
         <>
           <ShowLevel
             currentLevel={currentLevel}
-            className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2"
+            className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2"
           />
-          <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
+          <div className="absolute pointer-events-none top-20 left-[calc(50%-150px)] transform -translate-x-1/2">
             <Timer isActive={isActive} onTimerUpdate={setTimer} />
           </div>
           <MoveCounter
             moveCount={moveCount}
-            className="absolute pointer-events-none top-32 left-[calc(50%+150px)] transform -translate-x-1/2"
+            className="absolute pointer-events-none top-20 left-[calc(50%+150px)] transform -translate-x-1/2"
           />
-          <p className="absolute pointer-events-none top-40 left-1/2 transform -translate-x-1/2 text-sm text-muted-foreground">
-            {gameState.isComplete ? "Complete!" : "In Progress..."}
-          </p>
-          <Button
-            variant="outline"
-            onClick={handleReset}
-            className="absolute top-48 left-1/2 transform -translate-x-1/2"
-          >
-            Reset Level
-          </Button>
-          {gameState.isComplete && (
-            <Button
-              onClick={handleNextLevel}
-              disabled={currentLevel >= levels.length - 1}
-              className="absolute top-56 left-1/2 transform -translate-x-1/2"
-            >
-              Next Level
-            </Button>
-          )}
-          {gameState.errorMessage && (
-            <Alert
-              variant="destructive"
-              className="absolute top-64 left-1/2 transform -translate-x-1/2"
-            >
-              <AlertDescription>{gameState.errorMessage}</AlertDescription>
-            </Alert>
-          )}
-          {gameState.isComplete && (
-            <Alert className="absolute top-72 left-1/2 transform -translate-x-1/2 bg-green-100 border-green-200">
-              <Trophy className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-600">
-                Congratulations! You&apos;ve completed this level!
-              </AlertDescription>
-            </Alert>
-          )}
-          <div className="absolute top-60 left-1/2 transform -translate-x-1/2">
+          <div className="absolute top-[20%] left-1/2 transform rounded-3xl -translate-x-1/2">
             <div className="float">
               <MazeGrid
                 level={levels[currentLevel]}

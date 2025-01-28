@@ -192,7 +192,7 @@ export function MazeGrid({
         height={level.size * (CELL_SIZE + 2)}
       />
       <div
-        className="grid gap-0.5 bg-gray-200 p-2 rounded-lg shadow-lg"
+        className="grid bg-gray-200 rounded-lg"
         style={{
           gridTemplateColumns: `repeat(${level.size}, minmax(0, 1fr))`,
         }}
