@@ -4,12 +4,14 @@ interface TimerProps {
   isActive: boolean;
   textColor?: string;
   onTimerUpdate: (time: number) => void;
+  onTimerEnd: () => void;
 }
 
 const Timer: React.FC<TimerProps> = ({
   isActive,
   textColor = "text-white",
   onTimerUpdate,
+  onTimerEnd,
 }) => {
   const [timer, setTimer] = useState(300000); // 5 minutes in milliseconds
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -23,12 +25,16 @@ const Timer: React.FC<TimerProps> = ({
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - (startTime || currentTime);
-        const timeLeft = 300000 - elapsedTime;
+        const timeLeft = 5000 - elapsedTime;
         if (timeLeft <= 0) {
           clearInterval(interval!);
           setTimer(0);
           onTimerUpdate(0);
 
+          // Appel de la fonction onTimerEnd
+          if (onTimerEnd) {
+            onTimerEnd();
+          }
           // Добавляем редирект на нужную страницу
           window.location.href =
             "https://irresistible-products-927490.framer.app/loose";
@@ -41,7 +47,7 @@ const Timer: React.FC<TimerProps> = ({
       clearInterval(interval!);
     }
     return () => clearInterval(interval!);
-  }, [isActive, timer, onTimerUpdate, startTime]);
+  }, [isActive, timer, onTimerUpdate, startTime, onTimerEnd]);
 
   const minutes = Math.floor(timer / 60000)
     .toString()

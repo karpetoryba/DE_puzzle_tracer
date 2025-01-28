@@ -3,9 +3,6 @@
 import "./globals.css";
 import React, { useEffect, useState } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Trophy } from "lucide-react";
 import Timer from "@/components/game/game_ui/timer/Timer";
 import { useGameState } from "@/components/game/gameHooks/useGameState";
 import { levels } from "@/components/game/levels/levels";
@@ -13,6 +10,7 @@ import Rive from "@rive-app/react-canvas";
 import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
+import { Player } from "@/types/player";
 
 export default function Home() {
   const {
@@ -29,6 +27,25 @@ export default function Home() {
     handleMove,
     resetMoveCount,
   } = useGameState();
+
+  const [formDisplayed, setFormDisplayed] = useState(true);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [player, setPlayer] = useState<Player>({
+    id: 0,
+    score: 0,
+  });
+
+  const sendScore = () => {
+    console.log("coucou");
+  };
+
+  const onSubmit = () => {
+    setFormDisplayed(false);
+  };
+
+  const onPress = () => {
+    console.log(player);
+  };
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -52,8 +69,6 @@ export default function Home() {
     };
   }, []);
 
-  const [formDisplayed, setFormDisplayed] = useState(true);
-
   return (
     <div className="min-h-screen w-full custom-cursor bg-transparent interactive">
       <Rive
@@ -66,27 +81,39 @@ export default function Home() {
       {formDisplayed && (
         <FormPlayer
           classname="absolute left-[45%] bottom-[50%] float"
-          onSubmit={() => setFormDisplayed(false)}
+          onSubmit={onSubmit}
+          setPlayer={setPlayer}
         />
       )}
 
       {!formDisplayed && (
         <>
+          <button
+            onClick={onPress}
+            className="absolute top-20 left-1/2 transform -translate-x-1/2"
+          >
+            COUCOU
+          </button>
+
           <ShowLevel
             currentLevel={currentLevel}
             className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2"
           />
+
           <div className="absolute pointer-events-none top-20 left-[calc(50%-150px)] transform -translate-x-1/2">
             <Timer
               isActive={isActive}
               onTimerUpdate={setTimer}
               textColor="text-white"
+              onTimerEnd={sendScore} // Ajouté ici
             />
           </div>
+
           <MoveCounter
             moveCount={moveCount}
             className="absolute pointer-events-none top-20 left-[calc(50%+150px)] transform -translate-x-1/2"
           />
+
           <div className="absolute top-[20%] left-1/2 transform rounded-3xl -translate-x-1/2">
             <div className="float">
               <MazeGrid
