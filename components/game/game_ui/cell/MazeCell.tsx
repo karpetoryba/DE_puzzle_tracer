@@ -1,4 +1,5 @@
 "use client";
+
 import { Position } from "@/types/game";
 import { cn } from "@/components/game/settings/utils";
 import { CELL_SIZE } from "@/components/game/game_ui/cell/cellSize";
@@ -39,7 +40,7 @@ export function MazeCell({
         "bg-purple-500": isMirrorStart,
         "bg-emerald-500": isMirrorEnd,
         "buttonCheckpoint": isMustGoThrough,
-        "buttonCheckpointOn": isMustGoThrough && isPath,
+        "buttonCheckpointOn": isMustGoThrough && (isPath || isMirrorPath),
       })}
       style={{ width: CELL_SIZE, height: CELL_SIZE }}
       onMouseDown={() => {
