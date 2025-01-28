@@ -28,6 +28,9 @@ export function MazeGrid({
   setCurrentLevel,
   resetMoveCount,
 }: MazeGridProps) {
+  if (!level) {
+    return null; // ou un indicateur de chargement
+  }
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
   const [mirrorPath, setMirrorPath] = useState<Position[]>(
     level.mirrorStart ? [level.mirrorStart] : []
@@ -120,6 +123,15 @@ export function MazeGrid({
     setMirrorPath(level.mirrorStart ? [level.mirrorStart] : []);
     lastValidPosition.current = level.start;
   }, [level]);
+
+  // Check if the level is completed
+  useEffect(() => {
+    const lastPosition = currentPath[currentPath.length - 1];
+    if (lastPosition.x === level.end.x && lastPosition.y === level.end.y) {
+      // Move to the next level
+      setCurrentLevel((prevLevel) => prevLevel + 1);
+    }
+  }, [currentPath, level.end, setCurrentLevel]);
 
   const gridCells = useMemo(
     () =>
