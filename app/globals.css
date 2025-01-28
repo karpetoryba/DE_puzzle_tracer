@@ -1498,12 +1498,75 @@ h1, h2, h3, h4, h5, h6 {
   .bg-popover {
     background-color: hsl(var(--popover));
   }
+
+
+  @keyframes scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   .buttonStart {
+    background-image: url('../components/game/assets/buttonstart.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
+    animation: scale 1s ease-in-out infinite;
+    z-index: 2 ;
+  }
+
+  .buttonEnd {
     background-image: url('../components/game/assets/egerg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
+  }
+
+  .notWalkable {
+    background-image: url('../components/game/assets/testcell.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1 ;
+  }
+
+  .buttonMirrorStart {
+    background-image: url('../components/game/assets/buttonmirrorstart.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: scale 1s ease-in-out infinite;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+
+
+  .glassmorphism {
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px; /* Add padding to prevent background shape change */
+    text-align: center;
+    min-width: 150px; /* Ensure a minimum width to prevent resizing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(1);
+    transition: transform 0.3s ease; /* Add transition for smooth scaling */
+  }
+  
+  .glassmorphism:hover {
+    transform: scale(1.1);
   }
   .bg-purple-500 {
     --tw-bg-opacity: 1;

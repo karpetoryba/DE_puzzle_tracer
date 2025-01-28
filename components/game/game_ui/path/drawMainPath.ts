@@ -21,14 +21,14 @@ export function drawMainPath(
 
   if (currentPath.length > 1) {
     ctx.beginPath();
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 1)";
     ctx.lineWidth = 16;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
     // Add glow effect
     ctx.shadowBlur = 20;
-    ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+    ctx.shadowColor = "rgba(255, 255, 255, 1)";
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 

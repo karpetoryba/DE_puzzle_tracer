@@ -89,34 +89,24 @@ export default function Home() {
 
       {!formDisplayed && (
         <>
-          <button
-            onClick={onPress}
-            className="absolute top-20 left-1/2 transform -translate-x-1/2"
-          >
-            COUCOU
-          </button>
-
-          <ShowLevel
-            currentLevel={currentLevel}
-            className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2"
-          />
-
-          <div className="absolute pointer-events-none top-20 left-[calc(50%-150px)] transform -translate-x-1/2">
+          <div className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2 flex space-x-8">
+            <ShowLevel
+              currentLevel={currentLevel}
+              className="pointer-events-none"
+            />
             <Timer
+              textColor="text-white"
               isActive={isActive}
               onTimerUpdate={setTimer}
-              textColor="text-white"
               onTimerEnd={sendPlayer} // Ajouté ici
               setTimeScore={setTimeScore}
             />
+            <MoveCounter
+              moveCount={moveCount}
+              className="pointer-events-none"
+            />
           </div>
-
-          <MoveCounter
-            moveCount={moveCount}
-            className="absolute pointer-events-none top-20 left-[calc(50%+150px)] transform -translate-x-1/2"
-          />
-
-          <div className="absolute top-[20%] left-1/2 transform rounded-3xl -translate-x-1/2">
+          <div className="absolute top-[20%] left-1/2 transform scale-[100%] -translate-x-1/2">
             <div className="float">
               <MazeGrid
                 level={levels[currentLevel]}
