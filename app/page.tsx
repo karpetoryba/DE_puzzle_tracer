@@ -76,7 +76,7 @@ export default function Home() {
             currentLevel={currentLevel}
             className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2"
           />
-          <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
+          <div className="absolute pointer-events-none top-20 left-[calc(50%-150px)] transform -translate-x-1/2">
             <Timer
               isActive={isActive}
               onTimerUpdate={setTimer}
