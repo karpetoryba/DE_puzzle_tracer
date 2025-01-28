@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 interface TimerProps {
   isActive: boolean;
@@ -11,51 +11,50 @@ const Timer: React.FC<TimerProps> = ({
   textColor = "text-white",
   onTimerUpdate,
 }) => {
-  const [timer, setTimer] = useState<number>(0);
+  const [timer, setTimer] = useState(300000); // 5 minutes in milliseconds
   const [startTime, setStartTime] = useState<number | null>(null);
 
   useEffect(() => {
-    let interval: number | null = null; // Typé en number pour `window.setInterval`
-
+    let interval: NodeJS.Timeout | null = null;
     if (isActive) {
       if (!startTime) {
         setStartTime(Date.now());
       }
-      interval = window.setInterval(() => {
+      interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - (startTime || currentTime);
-        setTimer(elapsedTime);
-        onTimerUpdate(elapsedTime);
-      }, 100);
-    } else if (!isActive && timer !== 0) {
-      if (interval) {
-        clearInterval(interval);
-      }
-    }
+        const timeLeft = 300000 - elapsedTime;
+        if (timeLeft <= 0) {
+          clearInterval(interval!);
+          setTimer(0);
+          onTimerUpdate(0);
 
-    // Nettoyage de l'interval
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
+          // Добавляем редирект на нужную страницу
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/loose";
+        } else {
+          setTimer(timeLeft);
+          onTimerUpdate(timeLeft);
+        }
+      }, 100);
+    } else if (!isActive && timer !== 300000) {
+      clearInterval(interval!);
+    }
+    return () => clearInterval(interval!);
   }, [isActive, timer, onTimerUpdate, startTime]);
 
-  // Calcul des minutes, secondes et millisecondes
   const minutes = Math.floor(timer / 60000)
     .toString()
     .padStart(2, "0");
   const seconds = Math.floor((timer % 60000) / 1000)
     .toString()
     .padStart(2, "0");
-  const milliseconds = Math.floor((timer % 1000) / 10)
-    .toString()
-    .padStart(2, "0");
+  const milliseconds = (timer % 1000).toFixed(0).padStart(3, "0").slice(0, 2);
 
   return (
-    <h2 className={`text-2xl font-semibold ${textColor}`}>
-      Timer : {minutes}:{seconds}:{milliseconds}
-    </h2>
+    <div className={`timer ${textColor} text-2xl font-bold`}>
+      {minutes}:{seconds}:{milliseconds}
+    </div>
   );
 };
 

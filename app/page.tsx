@@ -18,9 +18,7 @@ export default function Home() {
   const {
     currentLevel,
     gameState,
-    timer,
     isActive,
-    hasStarted,
     moveCount,
     setGameState,
     setTimer,
@@ -39,6 +37,9 @@ export default function Home() {
       const centerY = window.innerHeight / 2;
       const moveX = (clientX - centerX) * 0.05;
       const moveY = (clientY - centerY) * 0.05;
+
+      document.documentElement.style.setProperty("--move-x", `${moveX}px`);
+      document.documentElement.style.setProperty("--move-y", `${moveY}px`);
 
       document.documentElement.style.setProperty("--move-x", `${moveX}px`);
       document.documentElement.style.setProperty("--move-y", `${moveY}px`);
@@ -76,7 +77,11 @@ export default function Home() {
             className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2"
           />
           <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
-            <Timer isActive={isActive} onTimerUpdate={setTimer} />
+            <Timer
+              isActive={isActive}
+              onTimerUpdate={setTimer}
+              textColor="text-white"
+            />
           </div>
           <MoveCounter
             moveCount={moveCount}
