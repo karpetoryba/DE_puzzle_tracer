@@ -17,7 +17,7 @@ interface MazeGridProps {
   onFirstInput: () => void;
   onMove: () => void;
   setCurrentLevel: React.Dispatch<React.SetStateAction<number>>;
-  resetMoveCount: () => void;
+  resetMoveCount?: () => void;
 }
 
 export function MazeGrid({
