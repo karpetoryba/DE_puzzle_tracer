@@ -1,6 +1,9 @@
 import React, { useState, useEffect, SetStateAction } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { Player } from "@/types/player";
+import scoring from "../../scoring/scoring";
+import { levels } from "../../levels/levels";
 
 interface TimerProps {
   isActive: boolean;
@@ -9,6 +12,8 @@ interface TimerProps {
   onTimerEnd: () => void;
   setTimeScore: React.Dispatch<SetStateAction<number>>;
   setGameFinished: React.Dispatch<SetStateAction<boolean>>;
+  setPlayer: React.Dispatch<React.SetStateAction<Player>>;
+  moveCount: number;
 }
 
 const Timer: React.FC<TimerProps> = ({
@@ -18,9 +23,13 @@ const Timer: React.FC<TimerProps> = ({
   onTimerEnd,
   setTimeScore,
   setGameFinished,
+  setPlayer,
+  moveCount,
 }) => {
   const [timer, setTimer] = useState(300000); // 5 minutes in milliseconds
   const [startTime, setStartTime] = useState<number | null>(null);
+
+  const totalLevels = levels.length;
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -31,17 +40,23 @@ const Timer: React.FC<TimerProps> = ({
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - (startTime || currentTime);
-        const timeLeft = 5000 - elapsedTime;
+        const timeLeft = 300000 - elapsedTime;
+
         if (timeLeft <= 0) {
+          const playerScore = scoring(moveCount, currentTime);
+          setPlayer((prevPlayer) => ({
+            ...prevPlayer,
+            score: playerScore,
+          }));
+
+          setTimeScore(0);
+
           clearInterval(interval!);
           setTimer(0);
           onTimerUpdate(0);
 
-          // Appel de la fonction onTimerEnd
-          if (onTimerEnd) {
-            onTimerEnd();
-            setGameFinished(true);
-          }
+          setGameFinished(true);
+
           // Добавляем редирект на нужную страницу
         } else {
           setTimer(timeLeft);

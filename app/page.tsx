@@ -11,7 +11,6 @@ import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
 import { Player } from "@/types/player";
-import { time } from "console";
 
 export default function Home() {
   const {
@@ -32,13 +31,14 @@ export default function Home() {
   const [formDisplayed, setFormDisplayed] = useState(true);
   const [gameFinished, setGameFinished] = useState(false);
   const [timeScore, setTimeScore] = useState(1);
+  const [moves, setMoves] = useState(0);
   const [player, setPlayer] = useState<Player>({
     id: 0,
     score: 0,
   });
 
-  const sendPlayer = () => {
-    console.log("coucou");
+  const endGame = () => {
+    setGameFinished(true);
   };
 
   const onSubmit = () => {
@@ -63,10 +63,14 @@ export default function Home() {
           gameId: 4,
         }), // Conversion de l'objet en JSON
       }).then(() => {
+        if (timeScore === 0) {
+          console.log("lose");
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/loose";
+        }
         window.location.href =
-          "https://irresistible-products-927490.framer.app/loose";
+          "https://irresistible-products-927490.framer.app/win";
       });
-      console.log(player);
     }
   }, [gameFinished, player]);
 
@@ -115,14 +119,17 @@ export default function Home() {
             <ShowLevel
               currentLevel={currentLevel}
               className="pointer-events-none"
+              setGameFinished={setGameFinished}
             />
             <Timer
               textColor="text-white"
               isActive={isActive}
               onTimerUpdate={setTimer}
-              onTimerEnd={sendPlayer} // Ajouté ici
+              onTimerEnd={endGame} // Ajouté ici
               setTimeScore={setTimeScore}
               setGameFinished={setGameFinished}
+              setPlayer={setPlayer}
+              moveCount={moveCount}
             />
             <MoveCounter
               moveCount={moveCount}
