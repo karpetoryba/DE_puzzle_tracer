@@ -89,6 +89,33 @@
   }
 }
 
+
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes float {
   0% {
     transform: translateY(0);
@@ -1461,12 +1488,12 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .bg-destructive\/20 {
-    background-color: rgba(0, 0, 0, 0.33);
+    background-color: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(2px);
   }
 
   .bg-destructive\/20:hover {
-    background-color:rgba(0, 0, 0, 0.33);;
+    background-color:rgba(0, 0, 0, 0.25);;
     backdrop-filter: blur(2px);
   }
 
@@ -1498,36 +1525,160 @@ h1, h2, h3, h4, h5, h6 {
   .bg-popover {
     background-color: hsl(var(--popover));
   }
+
+  .formPlayerButton{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+  }
+
+  @keyframes scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   .buttonStart {
-    background-image: url('../components/game/assets/egerg.png');
+    background-image: url('../components/game/assets/buttonstart.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
+    animation: scale 1s ease-in-out infinite;
+    z-index: 2 ;
   }
-  .bg-purple-500 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(168 85 247 / var(--tw-bg-opacity));
+
+  .buttonEnd {
+    background-image: url('../components/game/assets/buttonend.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
   }
-  .bg-secondary {
-    background-color: hsl(var(--secondary));
+
+  .buttonMirrorEnd {
+    background-image: url('../components/game/assets/buttonmirrorend.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    animation: scale 1s ease-in-out infinite;
   }
-  .bg-transparent {
-    background-color: transparent;
+
+  .notWalkable {
+    background-image: url('../components/game/assets/testcell.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1 ;
   }
+
+  .buttonMirrorStart {
+    background-image: url('../components/game/assets/buttonmirrorstart.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: scale 1s ease-in-out infinite;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+
+  .glassmorphism {
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px 20px; /* Add padding to prevent background shape change */
+    text-align: center;
+    min-width: 200px; /* Ensure a minimum width to prevent resizing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Add transition for smooth scaling */
+    animation: pulse 3s ease-in-out infinite; /* Add animation */
+  }
+  
+  .float1 {
+    animation: float1 3s infinite;
+    animation-delay: 0s;
+  }
+  
+  .float2 {
+    animation: float2 3s infinite;
+    animation-delay: 0.2s;
+  }
+  
+  .float3 {
+    animation: float3 3s infinite;
+    animation-delay: 0.4s;
+  }
+  @keyframes float1 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  @keyframes float2 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  @keyframes float3 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  @keyframes floatbud {
+    0% {
+      transform: translateY(0);
+      transform: scale(1)
+    }
+    50% {
+      transform: translateY(-5px);
+      transform: scale(1.1)
+    }
+    100% {
+      transform: translateY(0);
+      transform: scale(1)
+    }
+  }
+  
   .buttonCheckpoint {
-    background-image: url('../components/game/assets/flower.png');
+    background-image: url('../components/game/assets/flowerbug.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     scale: 1.5;
     z-index: 2;
-    transition: 1s ease !important;
+    transition: 1s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8)); /* Add glow effect to the PNG */
   }
 
-  .buttonCheckpoint:hover {
-    transition: 1s ease !important; 
-    transform: scale(1.1) rotate(20deg); /* Combine scale and rotate transformations */
 
+
+  .buttonCheckpointOn {
+    transform: scale(1.1) rotate(360deg);
+    background-image: url('../components/game/assets/flower.png'); /* Combine scale and rotate transformations */
   }
 
   .fill-current {

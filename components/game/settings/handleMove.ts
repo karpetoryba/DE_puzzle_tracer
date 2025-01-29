@@ -14,7 +14,7 @@ export function handleMove(
   onGameStateChange: (state: GameState) => void,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
   setCurrentLevel: React.Dispatch<React.SetStateAction<number>>,
-  resetMoveCount: () => void
+  resetMoveCount?: () => void
 ) {
   const mirrorPos =
     level.mirrorStart && level.mirrorEnd
@@ -112,7 +112,6 @@ export function handleMove(
           return prevLevel; // Stay on the current level if there are no more levels
         }
       });
-      resetMoveCount(); // Reset the move count
       onGameStateChange({
         currentPath: [level.start],
         mirrorPath: level.mirrorStart ? [level.mirrorStart] : [],

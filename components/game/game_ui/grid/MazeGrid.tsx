@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { Level, Position, GameState } from "@/types/game";
 import { MazeCell } from "@/components/game/game_ui/cell/MazeCell";
@@ -18,7 +17,7 @@ interface MazeGridProps {
   onFirstInput: () => void;
   onMove: () => void;
   setCurrentLevel: React.Dispatch<React.SetStateAction<number>>;
-  resetMoveCount: () => void;
+  resetMoveCount?: () => void;
 }
 
 export function MazeGrid({
@@ -29,6 +28,9 @@ export function MazeGrid({
   setCurrentLevel,
   resetMoveCount,
 }: MazeGridProps) {
+  if (!level) {
+    return null; // ou un indicateur de chargement
+  }
   const [currentPath, setCurrentPath] = useState<Position[]>([level.start]);
   const [mirrorPath, setMirrorPath] = useState<Position[]>(
     level.mirrorStart ? [level.mirrorStart] : []
@@ -73,7 +75,7 @@ export function MazeGrid({
         level,
         getMirrorPosition,
         setCurrentPath,
-        setMirrorPath, // Pass this line to update the mirror path
+        setMirrorPath,
         onMove,
         onGameStateChange,
         setIsDragging,
@@ -122,6 +124,15 @@ export function MazeGrid({
     lastValidPosition.current = level.start;
   }, [level]);
 
+  // Check if the level is completed
+  useEffect(() => {
+    const lastPosition = currentPath[currentPath.length - 1];
+    if (lastPosition.x === level.end.x && lastPosition.y === level.end.y) {
+      // Move to the next level
+      setCurrentLevel((prevLevel) => prevLevel + 1);
+    }
+  }, [currentPath, level.end, setCurrentLevel]);
+
   const gridCells = useMemo(
     () =>
       level.grid.map((row, y) =>
@@ -150,13 +161,13 @@ export function MazeGrid({
             <MazeCell
               key={`${x}-${y}`}
               isWalkable={isWalkable}
-              isMustGoThrough={isMustGoThrough}
               isStart={isStart}
               isEnd={isEnd}
               isMirrorStart={isMirrorStart}
               isMirrorEnd={isMirrorEnd}
               isPath={isPath}
               isMirrorPath={isMirrorPath}
+              isMustGoThrough={isMustGoThrough}
               position={position}
               onCellInteraction={handleCellInteraction}
               onMouseDown={() =>
@@ -189,11 +200,11 @@ export function MazeGrid({
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 z-10 pointer-events-none"
-        width={level.size * (CELL_SIZE + 2)} // Adjust the width based on cell size and gap
-        height={level.size * (CELL_SIZE + 2)} // Adjust the height based on cell size and gap
+        width={level.size * (CELL_SIZE + 2)}
+        height={level.size * (CELL_SIZE + 2)}
       />
       <div
-        className="grid gap-0.5 bg-gray-200 p-2 rounded-lg shadow-lg]"
+        className="grid bg-gray-200 rounded-lg"
         style={{
           gridTemplateColumns: `repeat(${level.size}, minmax(0, 1fr))`,
         }}

@@ -1,11 +1,9 @@
 "use client";
 
 import "./globals.css";
+
 import React, { useEffect, useState } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Trophy } from "lucide-react";
 import Timer from "@/components/game/game_ui/timer/Timer";
 import { useGameState } from "@/components/game/gameHooks/useGameState";
 import { levels } from "@/components/game/levels/levels";
@@ -13,14 +11,13 @@ import Rive from "@rive-app/react-canvas";
 import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
+import { Player } from "@/types/player";
 
 export default function Home() {
   const {
     currentLevel,
     gameState,
-    timer,
     isActive,
-    hasStarted,
     moveCount,
     setGameState,
     setTimer,
@@ -31,6 +28,52 @@ export default function Home() {
     handleMove,
     resetMoveCount,
   } = useGameState();
+
+  const [formDisplayed, setFormDisplayed] = useState(true);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [timeScore, setTimeScore] = useState(1);
+  const [moves, setMoves] = useState(0);
+  const [player, setPlayer] = useState<Player>({
+    id: 0,
+    score: 0,
+  });
+
+  const endGame = () => {
+    setGameFinished(true);
+  };
+
+  const onSubmit = () => {
+    setFormDisplayed(false);
+  };
+
+  const onPress = () => {
+    console.log(player);
+  };
+
+  useEffect(() => {
+    console.log(gameFinished);
+    if (gameFinished) {
+      fetch("https://app-user-ten.vercel.app/api/score/create", {
+        method: "POST", // Méthode HTTP
+        headers: {
+          "Content-Type": "application/json", // Spécifie que l'on envoie du JSON
+        },
+        body: JSON.stringify({
+          playerId: player.id,
+          score: player.score,
+          gameId: 4,
+        }), // Conversion de l'objet en JSON
+      }).then(() => {
+        if (timeScore === 0) {
+          console.log("lose");
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/loose";
+        }
+        window.location.href =
+          "https://irresistible-products-927490.framer.app/win";
+      });
+    }
+  }, [gameFinished, player]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -51,10 +94,8 @@ export default function Home() {
     };
   }, []);
 
-  const [formDisplayed, setFormDisplayed] = useState(true);
-
   return (
-    <div className="min-h-screen w-full custom-cursor bg-transparent interactive">
+    <div className="min-h-screen w-full custom-cursor bg-transparent interactive fade-in">
       <Rive
         src="animations/esd_gameplay_hand.riv"
         className="h-[100vh] w-full scale-110"
@@ -64,60 +105,36 @@ export default function Home() {
 
       {formDisplayed && (
         <FormPlayer
-          classname="absolute left-[45%] bottom-[50%] float"
-          onSubmit={() => setFormDisplayed(false)}
+          classname="absolute left-[40%] bottom-[45%] float form"
+          onSubmit={onSubmit}
+          setPlayer={setPlayer}
         />
       )}
 
       {!formDisplayed && (
         <>
-          <ShowLevel
-            currentLevel={currentLevel}
-            className="absolute pointer-events-none top-32 left-1/2 transform -translate-x-1/2"
-          />
-          <div className="absolute pointer-events-none top-32 left-[calc(50%-150px)] transform -translate-x-1/2">
-            <Timer isActive={isActive} onTimerUpdate={setTimer} />
+          <div className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2 flex space-x-8">
+            <ShowLevel
+              currentLevel={currentLevel}
+              className="pointer-events-none float1"
+              setGameFinished={setGameFinished}
+            />
+            <Timer
+              textColor="text-white float2"
+              isActive={isActive}
+              onTimerUpdate={setTimer}
+              onTimerEnd={endGame} // Ajouté ici
+              setTimeScore={setTimeScore}
+              setGameFinished={setGameFinished}
+              setPlayer={setPlayer}
+              moveCount={moveCount}
+            />
+            <MoveCounter
+              moveCount={moveCount}
+              className="pointer-events-none float3"
+            />
           </div>
-          <MoveCounter
-            moveCount={moveCount}
-            className="absolute pointer-events-none top-32 left-[calc(50%+150px)] transform -translate-x-1/2"
-          />
-          <p className="absolute pointer-events-none top-40 left-1/2 transform -translate-x-1/2 text-sm text-muted-foreground">
-            {gameState.isComplete ? "Complete!" : "In Progress..."}
-          </p>
-          <Button
-            variant="outline"
-            onClick={handleReset}
-            className="absolute top-48 left-1/2 transform -translate-x-1/2"
-          >
-            Reset Level
-          </Button>
-          {gameState.isComplete && (
-            <Button
-              onClick={handleNextLevel}
-              disabled={currentLevel >= levels.length - 1}
-              className="absolute top-56 left-1/2 transform -translate-x-1/2"
-            >
-              Next Level
-            </Button>
-          )}
-          {gameState.errorMessage && (
-            <Alert
-              variant="destructive"
-              className="absolute top-64 left-1/2 transform -translate-x-1/2"
-            >
-              <AlertDescription>{gameState.errorMessage}</AlertDescription>
-            </Alert>
-          )}
-          {gameState.isComplete && (
-            <Alert className="absolute top-72 left-1/2 transform -translate-x-1/2 bg-green-100 border-green-200">
-              <Trophy className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-600">
-                Congratulations! You&apos;ve completed this level!
-              </AlertDescription>
-            </Alert>
-          )}
-          <div className="absolute top-60 left-1/2 transform -translate-x-1/2">
+          <div className="absolute top-[20%] left-1/2 transform scale-[100%] -translate-x-1/2">
             <div className="float">
               <MazeGrid
                 level={levels[currentLevel]}
@@ -125,7 +142,6 @@ export default function Home() {
                 onFirstInput={handleFirstInput}
                 onMove={handleMove}
                 setCurrentLevel={setCurrentLevel}
-                resetMoveCount={resetMoveCount}
               />
             </div>
           </div>

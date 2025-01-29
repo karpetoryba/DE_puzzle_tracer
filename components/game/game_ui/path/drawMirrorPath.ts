@@ -21,10 +21,16 @@ export function drawMirrorPath(
 
   if (mirrorPath.length > 1) {
     ctx.beginPath();
-    ctx.strokeStyle = "rgba(168, 85, 247, 0.8)";
+    ctx.strokeStyle = "rgb(255, 255, 255)";
     ctx.lineWidth = 16;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
+
+    // Add glow effect
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "rgb(255, 255, 255)";
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
 
     const start = getCellCenter(mirrorPath[0]);
     ctx.moveTo(start.x, start.y);

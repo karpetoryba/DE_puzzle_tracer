@@ -12,7 +12,7 @@ interface MazeCellProps {
   isMirrorEnd: boolean;
   isPath: boolean;
   isMirrorPath: boolean;
-  isMustGoThrough: boolean | undefined; // Modifiez cette ligne pour permettre plusieurs cases
+  isMustGoThrough: boolean | undefined;
   position: Position;
   onCellInteraction: (position: Position) => void;
   onMouseDown: () => void;
@@ -26,30 +26,28 @@ export function MazeCell({
   isMirrorEnd,
   isPath,
   isMirrorPath,
-  isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
+  isMustGoThrough,
   position,
   onCellInteraction,
   onMouseDown,
 }: MazeCellProps) {
   return (
     <div
-      className={cn("border border-gray-200 transition-colors rounded-md", {
-        "bg-destructive/20 pointer-events-none": !isWalkable,
+      className={cn(" transition-colors", {
+        "bg-destructive/20 pointer-events-none ": !isWalkable,
         "buttonStart bg-transparent": isStart,
-        "bg-green-500": isEnd,
-        "bg-purple-500": isMirrorStart,
-        "bg-emerald-500": isMirrorEnd,
-        "buttonCheckpoint": isMustGoThrough, // Modifiez cette ligne pour permettre plusieurs cases
+        "buttonEnd": isEnd,
+        "buttonMirrorStart": isMirrorStart,
+        "buttonMirrorEnd": isMirrorEnd,
+        "buttonCheckpoint": isMustGoThrough,
+        "buttonCheckpointOn": isMustGoThrough && (isPath || isMirrorPath),
       })}
-
-      style={{ width: CELL_SIZE, height: CELL_SIZE }} // Set the cell size
+      style={{ width: CELL_SIZE, height: CELL_SIZE }}
       onMouseDown={() => {
         onMouseDown();
         onCellInteraction(position);
       }}
-      
       onMouseEnter={() => {
-        // Si le curseur s'ouvre sur la clé de démarrage, activez la procédure
         if (isStart || isMirrorStart) {
           onMouseDown();
         }

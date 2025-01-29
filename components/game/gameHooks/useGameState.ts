@@ -51,7 +51,6 @@ export function useGameState() {
       setTimer(0);
       setHasStarted(false);
       setIsActive(false);
-      setMoveCount(0);
     }
   };
 
