@@ -89,6 +89,14 @@ export function handleMove(
   if (isComplete) {
     if (!mustGoThroughVisited) {
       // Reset the path and dragging if the end cell is reached without visiting all mustGoThrough cells
+      const loseLevelSE = () => {
+        const loseSE = new Audio("/sounds/fx/de_lose.wav");
+        loseSE.volume = 0.1;
+        loseSE.play();
+      };
+
+      loseLevelSE();
+
       setCurrentPath([level.start]);
       setMirrorPath(level.mirrorStart ? [level.mirrorStart] : []);
       lastValidPosition.current = level.start;
