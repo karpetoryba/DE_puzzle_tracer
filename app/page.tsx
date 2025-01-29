@@ -11,6 +11,7 @@ import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
 import { Player } from "@/types/player";
+import { time } from "console";
 
 export default function Home() {
   const {
@@ -30,7 +31,7 @@ export default function Home() {
 
   const [formDisplayed, setFormDisplayed] = useState(true);
   const [gameFinished, setGameFinished] = useState(false);
-  const [timeScore, setTimeScore] = useState(0);
+  const [timeScore, setTimeScore] = useState(1);
   const [player, setPlayer] = useState<Player>({
     id: 0,
     score: 0,
@@ -47,6 +48,27 @@ export default function Home() {
   const onPress = () => {
     console.log(player);
   };
+
+  useEffect(() => {
+    console.log(gameFinished);
+    if (gameFinished) {
+      fetch("https://app-user-ten.vercel.app/api/score/create", {
+        method: "POST", // Méthode HTTP
+        headers: {
+          "Content-Type": "application/json", // Spécifie que l'on envoie du JSON
+        },
+        body: JSON.stringify({
+          playerId: player.id,
+          score: player.score,
+          gameId: 4,
+        }), // Conversion de l'objet en JSON
+      }).then(() => {
+        window.location.href =
+          "https://irresistible-products-927490.framer.app/loose";
+      });
+      console.log(player);
+    }
+  }, [gameFinished, player]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -100,6 +122,7 @@ export default function Home() {
               onTimerUpdate={setTimer}
               onTimerEnd={sendPlayer} // Ajouté ici
               setTimeScore={setTimeScore}
+              setGameFinished={setGameFinished}
             />
             <MoveCounter
               moveCount={moveCount}

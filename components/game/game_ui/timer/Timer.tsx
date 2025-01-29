@@ -8,6 +8,7 @@ interface TimerProps {
   onTimerUpdate: (time: number) => void;
   onTimerEnd: () => void;
   setTimeScore: React.Dispatch<SetStateAction<number>>;
+  setGameFinished: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const Timer: React.FC<TimerProps> = ({
@@ -16,6 +17,7 @@ const Timer: React.FC<TimerProps> = ({
   onTimerUpdate,
   onTimerEnd,
   setTimeScore,
+  setGameFinished,
 }) => {
   const [timer, setTimer] = useState(300000); // 5 minutes in milliseconds
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -29,7 +31,7 @@ const Timer: React.FC<TimerProps> = ({
       interval = setInterval(() => {
         const currentTime = Date.now();
         const elapsedTime = currentTime - (startTime || currentTime);
-        const timeLeft = 300000 - elapsedTime;
+        const timeLeft = 5000 - elapsedTime;
         if (timeLeft <= 0) {
           clearInterval(interval!);
           setTimer(0);
@@ -38,10 +40,9 @@ const Timer: React.FC<TimerProps> = ({
           // Appel de la fonction onTimerEnd
           if (onTimerEnd) {
             onTimerEnd();
+            setGameFinished(true);
           }
           // Добавляем редирект на нужную страницу
-          window.location.href =
-            "https://irresistible-products-927490.framer.app/loose";
         } else {
           setTimer(timeLeft);
           onTimerUpdate(timeLeft);
