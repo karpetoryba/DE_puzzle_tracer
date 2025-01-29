@@ -1,6 +1,7 @@
 "use client";
 
 import "./globals.css";
+
 import React, { useEffect, useState } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -40,9 +41,6 @@ export default function Home() {
 
       document.documentElement.style.setProperty("--move-x", `${moveX}px`);
       document.documentElement.style.setProperty("--move-y", `${moveY}px`);
-
-      document.documentElement.style.setProperty("--move-x", `${moveX}px`);
-      document.documentElement.style.setProperty("--move-y", `${moveY}px`);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -55,7 +53,7 @@ export default function Home() {
   const [formDisplayed, setFormDisplayed] = useState(true);
 
   return (
-    <div className="min-h-screen w-full custom-cursor bg-transparent interactive">
+    <div className="min-h-screen w-full custom-cursor bg-transparent interactive fade-in">
       <Rive
         src="animations/esd_gameplay_hand.riv"
         className="h-[100vh] w-full scale-110"
@@ -73,20 +71,20 @@ export default function Home() {
       {!formDisplayed && (
         <>
           <div className="absolute pointer-events-none top-20 left-1/2 transform -translate-x-1/2 flex space-x-8">
-      <ShowLevel
-        currentLevel={currentLevel}
-        className="pointer-events-none float1"
-      />
-      <Timer
-        isActive={isActive}
-        onTimerUpdate={setTimer}
-        textColor="text-white float2"
-      />
-      <MoveCounter
-        moveCount={moveCount}
-        className="pointer-events-none float3"
-      />
-    </div>
+            <ShowLevel
+              currentLevel={currentLevel}
+              className="pointer-events-none float1"
+            />
+            <Timer
+              isActive={isActive}
+              onTimerUpdate={setTimer}
+              textColor="text-white float2"
+            />
+            <MoveCounter
+              moveCount={moveCount}
+              className="pointer-events-none float3"
+            />
+          </div>
           <div className="absolute top-[20%] left-1/2 transform scale-[100%] -translate-x-1/2">
             <div className="float">
               <MazeGrid

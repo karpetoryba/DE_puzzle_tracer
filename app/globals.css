@@ -89,6 +89,33 @@
   }
 }
 
+
+.fade-in {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes float {
   0% {
     transform: translateY(0);
@@ -1530,11 +1557,20 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .buttonEnd {
-    background-image: url('../components/game/assets/egerg.png');
+    background-image: url('../components/game/assets/buttonend.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     filter: drop-shadow(0 0 10px rgba(255, 157, 244, 0.8));
+  }
+
+  .buttonMirrorEnd {
+    background-image: url('../components/game/assets/buttonmirrorend.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    animation: scale 1s ease-in-out infinite;
   }
 
   .notWalkable {

@@ -38,7 +38,7 @@ export function MazeCell({
         "buttonStart bg-transparent": isStart,
         "buttonEnd": isEnd,
         "buttonMirrorStart": isMirrorStart,
-        "bg-emerald-500": isMirrorEnd,
+        "buttonMirrorEnd": isMirrorEnd,
         "buttonCheckpoint": isMustGoThrough,
         "buttonCheckpointOn": isMustGoThrough && (isPath || isMirrorPath),
       })}
