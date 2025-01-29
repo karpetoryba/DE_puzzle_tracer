@@ -70,6 +70,15 @@ const Timer: React.FC<TimerProps> = ({
     return () => clearInterval(interval!);
   }, [isActive, timer, onTimerUpdate, startTime, onTimerEnd, setTimeScore]);
 
+  const [audio] = useState(new Audio("/sounds/BO.mp3"));
+
+  useEffect(() => {
+    if (isActive) {
+      console.log("musique");
+      audio.play();
+    }
+  }, [isActive]);
+
   const minutes = Math.floor(timer / 60000)
     .toString()
     .padStart(2, "0");
