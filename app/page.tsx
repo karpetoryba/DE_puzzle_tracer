@@ -46,6 +46,18 @@ export default function Home() {
     setFormDisplayed(false);
   };
 
+  const [audio] = useState(() => {
+    const validate_fx = new Audio("/sounds/fx/de_validate.wav");
+    validate_fx.volume = 0.1;
+    return validate_fx;
+  });
+  useEffect(() => {
+    if (!formDisplayed) {
+      console.log("musique");
+      audio.play();
+    }
+  }, [formDisplayed]);
+
   const onPress = () => {
     console.log(player);
   };
