@@ -46,7 +46,7 @@ export default function Home() {
     setFormDisplayed(false);
   };
 
-  const [audio] = useState(() => {
+  const [validate] = useState(() => {
     const validate_fx = new Audio("/sounds/fx/de_validate.wav");
     validate_fx.volume = 0.1;
     return validate_fx;
@@ -54,9 +54,19 @@ export default function Home() {
   useEffect(() => {
     if (!formDisplayed) {
       console.log("musique");
-      audio.play();
+      validate.play();
     }
   }, [formDisplayed]);
+
+  const nextLevelSE = () => {
+    const bo = new Audio("/sounds/fx/de_win.wav");
+    bo.volume = 0.2;
+    bo.play();
+  };
+
+  useEffect(() => {
+    nextLevelSE();
+  }, [currentLevel]);
 
   const onPress = () => {
     console.log(player);
@@ -124,7 +134,7 @@ export default function Home() {
         stateMachines={["State Machine 1"]}
       />
 
-      <BackgroundAudio audioPath="/sounds/fieldSnd.mp3" volume={0.5} />
+      <BackgroundAudio audioPath="/sounds/fieldSnd.mp3" volume={0.3} />
 
       {formDisplayed && (
         <FormPlayer

@@ -70,11 +70,14 @@ const Timer: React.FC<TimerProps> = ({
     return () => clearInterval(interval!);
   }, [isActive, timer, onTimerUpdate, startTime, onTimerEnd, setTimeScore]);
 
-  const [audio] = useState(new Audio("/sounds/BO.mp3"));
+  const [audio] = useState(() => {
+    const bo = new Audio("/sounds/BO.mp3");
+    bo.volume = 0.3;
+    return bo;
+  });
 
   useEffect(() => {
     if (isActive) {
-      console.log("musique");
       audio.play();
     }
   }, [isActive]);
