@@ -113,7 +113,7 @@ export default function Home() {
 
       {formDisplayed && (
         <FormPlayer
-          classname="absolute left-[40%] bottom-[45%] float form"
+          classname="absolute left-[45%] bottom-[45%] float form"
           onSubmit={onSubmit}
           setPlayer={setPlayer}
         />

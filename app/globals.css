@@ -261,6 +261,7 @@ h1, h2, h3, h4, h5, h6 {
   /* Apply Poppins font to the body */
   body {
     font-family: 'Poppins', sans-serif;
+    overflow: hidden;
   }
   
   /* Apply Poppins font to specific elements if needed */
