@@ -1461,7 +1461,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .bg-destructive\/20 {
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(2px);
   }
 
@@ -1499,6 +1499,13 @@ h1, h2, h3, h4, h5, h6 {
     background-color: hsl(var(--popover));
   }
 
+  .formPlayerButton{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+  }
 
   @keyframes scale {
     0% {
@@ -1548,37 +1555,63 @@ h1, h2, h3, h4, h5, h6 {
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
   }
 
-
   .glassmorphism {
     background: rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 10px 20px; /* Add padding to prevent background shape change */
     text-align: center;
-    min-width: 150px; /* Ensure a minimum width to prevent resizing */
+    min-width: 200px; /* Ensure a minimum width to prevent resizing */
     display: flex;
     align-items: center;
     justify-content: center;
     transform: scale(1);
-    transition: transform 0.3s ease; /* Add transition for smooth scaling */
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Add transition for smooth scaling */
+    animation: pulse 3s ease-in-out infinite; /* Add animation */
   }
   
-  .glassmorphism:hover {
-    transform: scale(1.1);
+  .float1 {
+    animation: float1 3s infinite;
+    animation-delay: 0s;
   }
-  .bg-purple-500 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(168 85 247 / var(--tw-bg-opacity));
+  
+  .float2 {
+    animation: float2 3s infinite;
+    animation-delay: 0.2s;
   }
-  .bg-secondary {
-    background-color: hsl(var(--secondary));
+  
+  .float3 {
+    animation: float3 3s infinite;
+    animation-delay: 0.4s;
   }
-  .bg-transparent {
-    background-color: transparent;
+  @keyframes float1 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
   }
-
+  
+  @keyframes float2 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  @keyframes float3 {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
   @keyframes floatbud {
     0% {
       transform: translateY(0);
