@@ -1,7 +1,6 @@
 "use client";
 
 import "./globals.css";
-
 import React, { useEffect, useState } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
 import Timer from "@/components/game/game_ui/timer/Timer";
@@ -68,12 +67,14 @@ export default function Home() {
           console.log("lose");
           window.location.href =
             "https://irresistible-products-927490.framer.app/loose";
+        } else if (currentLevel >= levels.length - 1) {
+          console.log("win");
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/win";
         }
-        window.location.href =
-          "https://irresistible-products-927490.framer.app/win";
       });
     }
-  }, [gameFinished, player]);
+  }, [gameFinished, player, timeScore, currentLevel]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -93,6 +94,13 @@ export default function Home() {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
+  useEffect(() => {
+    if (currentLevel >= levels.length) {
+      window.location.href =
+        "https://irresistible-products-927490.framer.app/win";
+    }
+  }, [currentLevel]);
 
   return (
     <div className="min-h-screen w-full custom-cursor bg-transparent interactive fade-in">
@@ -123,7 +131,7 @@ export default function Home() {
               textColor="text-white float2"
               isActive={isActive}
               onTimerUpdate={setTimer}
-              onTimerEnd={endGame} // Ajouté ici
+              onTimerEnd={endGame}
               setTimeScore={setTimeScore}
               setGameFinished={setGameFinished}
               setPlayer={setPlayer}
