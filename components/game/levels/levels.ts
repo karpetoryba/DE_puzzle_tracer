@@ -15,8 +15,8 @@ export const levels: Level[] = [
       [false, true, true, true, true, true, true, true, false],
       [false, false, false, false, false, false, false, false, false],
     ],
-    start: { x: 1, y: 7 },
-    end: { x: 1, y: 1 },
+    start: { x: 1, y: 1 },
+    end: { x: 1, y: 7 },
   },
 
   {

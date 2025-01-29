@@ -1,7 +1,6 @@
 "use client";
 
 import "./globals.css";
-
 import React, { useEffect, useState } from "react";
 import { MazeGrid } from "@/components/game/game_ui/grid/MazeGrid";
 import Timer from "@/components/game/game_ui/timer/Timer";
@@ -12,6 +11,7 @@ import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
 import { Player } from "@/types/player";
+import BackgroundAudio from "@/components/game/assets/sounds/BackgroundAudio";
 
 export default function Home() {
   const {
@@ -46,6 +46,28 @@ export default function Home() {
     setFormDisplayed(false);
   };
 
+  const [validate_sound] = useState(() => {
+    const validate_fx = new Audio("/sounds/fx/de_validate.wav");
+    validate_fx.volume = 0.1;
+    return validate_fx;
+  });
+  useEffect(() => {
+    if (!formDisplayed) {
+      console.log("musique");
+      validate_sound.play();
+    }
+  }, [formDisplayed]);
+
+  const nextLevelSE = () => {
+    const bo = new Audio("/sounds/fx/de_win.wav");
+    bo.volume = 0.2;
+    bo.play();
+  };
+
+  useEffect(() => {
+    nextLevelSE();
+  }, [currentLevel]);
+
   const onPress = () => {
     console.log(player);
   };
@@ -68,12 +90,14 @@ export default function Home() {
           console.log("lose");
           window.location.href =
             "https://irresistible-products-927490.framer.app/loose";
+        } else if (currentLevel >= levels.length - 1) {
+          console.log("win");
+          window.location.href =
+            "https://irresistible-products-927490.framer.app/win";
         }
-        window.location.href =
-          "https://irresistible-products-927490.framer.app/win";
       });
     }
-  }, [gameFinished, player]);
+  }, [gameFinished, player, timeScore, currentLevel]);
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -94,6 +118,13 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    if (currentLevel >= levels.length) {
+      window.location.href =
+        "https://irresistible-products-927490.framer.app/win";
+    }
+  }, [currentLevel]);
+
   return (
     <div className="min-h-screen w-full custom-cursor bg-transparent interactive fade-in">
       <Rive
@@ -103,9 +134,11 @@ export default function Home() {
         stateMachines={["State Machine 1"]}
       />
 
+      <BackgroundAudio audioPath="/sounds/fieldSnd.mp3" volume={0.3} />
+
       {formDisplayed && (
         <FormPlayer
-          classname="absolute left-[40%] bottom-[45%] float form"
+          classname="absolute left-[45%] bottom-[45%] float form"
           onSubmit={onSubmit}
           setPlayer={setPlayer}
         />
@@ -123,7 +156,7 @@ export default function Home() {
               textColor="text-white float2"
               isActive={isActive}
               onTimerUpdate={setTimer}
-              onTimerEnd={endGame} // Ajouté ici
+              onTimerEnd={endGame}
               setTimeScore={setTimeScore}
               setGameFinished={setGameFinished}
               setPlayer={setPlayer}

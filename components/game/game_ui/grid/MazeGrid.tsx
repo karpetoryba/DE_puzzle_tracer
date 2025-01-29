@@ -65,6 +65,61 @@ export function MazeGrid({
     [level.start, level.mirrorStart, level.mirrorAxis]
   );
 
+  const [mustGoThroughAudio] = useState(() => {
+    const flowerOnFX = new Audio("/sounds/fx/de_Fleur4.wav");
+    flowerOnFX.volume = 0.3;
+    return flowerOnFX;
+  });
+
+  useEffect(() => {
+    if (currentPath.length > 1 || mirrorPath.length > 1) {
+      const lastPosition = currentPath[currentPath.length - 1]; // Dernière position atteinte sur le chemin principal
+      const lastMirrorPosition = mirrorPath[mirrorPath.length - 1]; // Dernière position atteinte sur le chemin miroir
+
+      // Vérifie si l'une des deux positions est une case mustGoThrough
+      const isMustGoThrough = level.mustGoThrough?.some(
+        (pos) =>
+          (pos.x === lastPosition.x && pos.y === lastPosition.y) ||
+          (lastMirrorPosition &&
+            pos.x === lastMirrorPosition.x &&
+            pos.y === lastMirrorPosition.y) // Vérifie si lastMirrorPosition est défini
+      );
+
+      if (isMustGoThrough) {
+        mustGoThroughAudio.currentTime = 0; // Reset pour rejouer immédiatement
+        setTimeout(() => {
+          mustGoThroughAudio.play();
+        }, 250);
+      }
+    }
+  }, [currentPath, mirrorPath, level.mustGoThrough]);
+
+  const [moveAudio] = useState(() => {
+    const move = new Audio("/sounds/fx/moves.mp3");
+    move.volume = 0.3;
+    return move;
+  });
+  useEffect(() => {
+    if (currentPath.length > prevPathLength.current) {
+      moveAudio.currentTime = 0; // Reset pour rejouer immédiatement
+      moveAudio.play();
+    }
+  }, [currentPath]);
+
+  const [goBack] = useState(() => {
+    const moveBack = new Audio("/sounds/fx/movesBack.mp3");
+    moveBack.volume = 0.3;
+    return moveBack;
+  });
+  const prevPathLength = useRef(currentPath.length);
+  useEffect(() => {
+    if (currentPath.length < prevPathLength.current) {
+      goBack.currentTime = 0; // Reset pour rejouer immédiatement
+      goBack.play();
+    }
+    prevPathLength.current = currentPath.length; // Met à jour la longueur précédente
+  }, [currentPath]);
+
   const handleCellInteraction = useCallback(
     (position: Position) => {
       if (!hasStarted) return;
