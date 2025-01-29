@@ -11,6 +11,7 @@ import MoveCounter from "@/components/game/game_ui/moveCounter/MoveCounter";
 import ShowLevel from "@/components/game/game_ui/showLevel/ShowLevel";
 import FormPlayer from "@/components/game/game_ui/formPlayer/FormPlayer";
 import { Player } from "@/types/player";
+import BackgroundAudio from "@/components/game/assets/sounds/BackgroundAudio";
 
 export default function Home() {
   const {
@@ -110,6 +111,8 @@ export default function Home() {
         animations={["Idle-Loop_01", "Cursor_ExpandFlower"]}
         stateMachines={["State Machine 1"]}
       />
+
+      <BackgroundAudio audioPath="/sounds/fieldSnd.mp3" volume={0.5} />
 
       {formDisplayed && (
         <FormPlayer
