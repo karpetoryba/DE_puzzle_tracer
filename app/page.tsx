@@ -48,6 +48,15 @@ export default function Home() {
   const onPress = () => {
     console.log(player);
   };
+  //RESEEEEEEEEEEEEEEEEEEEEEEEEET
+  const resetLevel = () => {
+    setMoves(0);
+    setTimeScore(1);
+    setGameFinished(false);
+    setCurrentLevel(currentLevel); // Restart the current level
+    handleReset(); // Reset the game state
+    handleFirstInput(); // Reset the first input state
+  };
 
   useEffect(() => {
     console.log(gameFinished);
@@ -152,6 +161,11 @@ export default function Home() {
                 setCurrentLevel={setCurrentLevel}
               />
             </div>
+          </div>
+          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <button onClick={resetLevel} className="btn-reset">
+              Reset Level
+            </button>
           </div>
         </>
       )}
