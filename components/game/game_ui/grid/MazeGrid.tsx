@@ -96,7 +96,7 @@ export function MazeGrid({
 
   const [moveAudio] = useState(() => {
     const move = new Audio("/sounds/fx/moves.mp3");
-    move.volume = 0.3;
+    move.volume = 0.1;
     return move;
   });
   useEffect(() => {
@@ -108,7 +108,7 @@ export function MazeGrid({
 
   const [goBack] = useState(() => {
     const moveBack = new Audio("/sounds/fx/movesBack.mp3");
-    moveBack.volume = 0.3;
+    moveBack.volume = 0.1;
     return moveBack;
   });
   const prevPathLength = useRef(currentPath.length);

@@ -58,14 +58,15 @@ export default function Home() {
     }
   }, [formDisplayed]);
 
-  const nextLevelSE = () => {
+  const [nextLevelSE] = useState(() => {
     const bo = new Audio("/sounds/fx/de_win.wav");
-    bo.volume = 0.2;
-    bo.play();
-  };
+    bo.volume = 0.08;
+    return bo;
+  });
 
   useEffect(() => {
-    nextLevelSE();
+    nextLevelSE.currentTime = 0;
+    nextLevelSE.play();
   }, [currentLevel]);
 
   const onPress = () => {
